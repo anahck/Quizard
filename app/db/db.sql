@@ -1,1 +1,54 @@
--- comment
+DROP TABLE IF EXISTS questions CASCADE;
+DROP TABLE IF EXISTS subjects CASCADE;
+DROP TABLE IF EXISTS test CASCADE;
+DROP TABLE IF EXISTS scores CASCADE;
+DROP TABLE IF EXISTS userInfo CASCADE;
+
+CREATE TABLE userInfo (
+    userID INT GENERATED ALWAYS AS IDENTITY,
+    firstName VARCHAR(30) NOT NULL,
+    lastName VARCHAR(30) NOT NULL,
+    email VARCHAR(30) UNIQUE NOT NULL,
+    passwordHash CHAR(30) NOT NULL,
+    userRole VARCHAR(30) NOT NULL,
+    yearGroup INT NOT NULL,
+    PRIMARY KEY (userID)
+);
+
+CREATE TABLE subjects(
+    subjectID INT GENERATED ALWAYS AS IDENTITY,
+    subjectName VARCHAR(30) NOT NULL,
+    PRIMARY KEY (subjectID)
+);
+
+CREATE TABLE test(
+    testID INT GENERATED ALWAYS AS IDENTITY,
+    testName VARCHAR(30) NOT NULL,
+    subjectID INT NOT NULL,
+    dueDate DATE,
+    assignedDate DATE,
+    authorID INT,
+    PRIMARY KEY (testID),
+    FOREIGN KEY (subjectID) REFERENCES subjects(subjectID) ON DELETE CASCADE,
+    FOREIGN KEY (authorID) REFERENCES userInfo(userID) ON DELETE CASCADE
+);
+
+CREATE TABLE scores(
+    scoreID INT GENERATED ALWAYS AS IDENTITY,
+    userID INT NOT NULL,
+    testID INT NOT NULL,
+    score INT NOT NULL,
+    scoreDate DATE NOT NULL,
+    PRIMARY KEY (scoreID),
+    FOREIGN KEY (userID) REFERENCES userInfo(userID) ON DELETE CASCADE,
+    FOREIGN KEY (testID) REFERENCES test(testID) ON DELETE CASCADE
+);
+
+CREATE TABLE questions(
+    questionID INT GENERATED ALWAYS AS IDENTITY,
+    questionContent VARCHAR(500) NOT NULL,
+    testID INT NOT NULL,
+    totalScore INT NOT NULL,
+    answer VARCHAR(500) NOT NULL,
+    FOREIGN KEY (testID) REFERENCES test(testID) ON DELETE CASCADE
+);
