@@ -52,3 +52,46 @@ CREATE TABLE questions(
     answer VARCHAR(500) NOT NULL,
     FOREIGN KEY (testID) REFERENCES test(testID) ON DELETE CASCADE
 );
+
+INSERT INTO userInfo (firstName, lastName, email, passwordHash, userRole, yearGroup)
+VALUES
+('Alice', 'Johnson', 'alice@example.com', 'hashedpassword123', 'student', 10),
+('Bob', 'Smith', 'bob@example.com', 'hashedpassword456', 'student', 11),
+('Charlie', 'Brown', 'charlie@example.com', 'hashedpassword789', 'teacher', 0),
+('Diana', 'Prince', 'diana@example.com', 'hashedpassword321', 'teacher', 0);
+
+INSERT INTO subjects (subjectName)
+VALUES
+('History');
+
+INSERT INTO tests (testName, subjectID, dueDate, assignedDate, authorID)
+VALUES
+('World War II Basics', 1, '2025-09-01', '2025-08-15', 3),
+('Ancient Civilizations', 1, '2025-09-10', '2025-08-20', 4),
+('Modern History: Cold War', 1, '2025-09-20', '2025-08-25', 3);
+
+INSERT INTO questions (questionContent, testID, totalScore, answer)
+VALUES
+-- Test 1: World War II Basics
+('Who was the Prime Minister of Britain during most of WWII?', 1, 10, 'Winston Churchill'),
+('What year did WWII begin?', 1, 5, '1939'),
+('What year did WWII end?', 1, 5, '1945'),
+
+-- Test 2: Ancient Civilizations
+('Which civilization built the pyramids of Giza?', 2, 10, 'Ancient Egyptians'),
+('Who was the first emperor of Rome?', 2, 10, 'Augustus'),
+('What writing system was used in Ancient Mesopotamia?', 2, 10, 'Cuneiform'),
+
+-- Test 3: Modern History: Cold War
+('Which two superpowers were rivals during the Cold War?', 3, 10, 'USA and USSR'),
+('What year did the Berlin Wall fall?', 3, 10, '1989'),
+('Who was the Soviet leader during the Cuban Missile Crisis?', 3, 10, 'Nikita Khrushchev');
+
+INSERT INTO scores (userID, testID, score, scoreDate)
+VALUES
+(1, 1, 18.00, '2025-08-20'),  -- Alice: WWII Basics
+(2, 1, 15.00, '2025-08-20'),  -- Bob: WWII Basics
+(1, 2, 25.00, '2025-08-22'),  -- Alice: Ancient Civilizations
+(2, 3, 20.00, '2025-08-23');  -- Bob: Cold War
+
+
