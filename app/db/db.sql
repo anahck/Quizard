@@ -64,7 +64,7 @@ INSERT INTO subjects (subjectName)
 VALUES
 ('History');
 
-INSERT INTO tests (testName, subjectID, dueDate, assignedDate, authorID)
+INSERT INTO test (testName, subjectID, dueDate, assignedDate, authorID)
 VALUES
 ('World War II Basics', 1, '2025-09-01', '2025-08-15', 3),
 ('Ancient Civilizations', 1, '2025-09-10', '2025-08-20', 4),
