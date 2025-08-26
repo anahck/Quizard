@@ -39,7 +39,7 @@ class Test {
             throw Error("An author with this ID does not exist")
         }
         if(existingTest.rows.length === 0){
-            const response = await db.query("INSERT INTO test (testname, subjectid, duedate, assigneddate, authorid) VALUES ($1, $2, $3, $4, $5) RETURNING *",
+            const response = await db.query("INSERT INTO test (testname, subjectid, duedate, assigneddate, authorid) VALUES ($1, $2, $3, $4, $5) RETURNING *;",
                 [testname, subjectid, duedate, assigneddate, authorid])
             return new Test(response.rows[0])
         }
