@@ -3,13 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dashboard</title>
+  <title>Dashboard | Quizard</title>
   <link rel="stylesheet" href="./style.css">
   <script defer src="./js/dashboard.js"></script>
 </head>
 <body>
-  
-    <header>
+  <header>
     <h1><a href="index.html" class="logo">Quizard</a></h1>
     <nav>
       <a href="index.html">Login</a> | 
@@ -23,11 +22,27 @@
     <h2>Welcome to Your Dashboard</h2>
     <p>Here you can track your progress and access quizzes.</p>
 
-    <ul>
-      <li><a href="#">Start a new quiz</a></li>
-      <li><a href="#">View your scores</a></li>
-      <li><a href="#">Review past quizzes</a></li>
+    <ul id="dashboard-menu">
+      <li><a href="#" data-section="quiz">Start a new quiz</a></li>
+      <li><a href="#" data-section="scores">View your scores</a></li>
+      <li><a href="#" data-section="past">Review past quizzes</a></li>
     </ul>
+
+  
+    <section id="quiz" class="content hidden">
+      <h3>Start a New Quiz</h3>
+      <p>Loading quizzes...</p>
+    </section>
+
+    <section id="scores" class="content hidden">
+      <h3>Your Scores</h3>
+      <p>Loading scores...</p>
+    </section>
+
+    <section id="past" class="content hidden">
+      <h3>Past Quizzes</h3>
+      <p>Loading past quizzes...</p>
+    </section>
   </div>
 </body>
 </html>
