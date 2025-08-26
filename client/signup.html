@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -8,22 +7,35 @@
   <link rel="stylesheet" href="./style.css">
   <script defer src="./js/signup.js"></script>
 </head>
-
 <body>
   <div class="container">
     <h1>Sign Up</h1>
-
     <form id="signup-form">
-      <label for="username">Username:</label>
-      <input type="text" id="username" required>
+      <label for="firstname">First Name:</label>
+      <input type="text" id="firstname" required>
 
-      <label for="password">Password:</label>
-      <input type="password" id="password" required>
+      <label for="lastname">Last Name:</label>
+      <input type="text" id="lastname" required>
+
+      <label for="email">Email:</label>
+      <input type="email" id="email" required>
+
+      <label for="passwordhash">Password:</label>
+      <input type="password" id="passwordhash" required>
+
+      <label for="userrole">Role:</label>
+      <select id="userrole" required>
+        <option value="">Select role</option>
+        <option value="student">Student</option>
+        <option value="teacher">Teacher</option>
+      </select>
+
+      <label for="yeargroup">Year Group:</label>
+      <input type="number" id="yeargroup" min="7" max="11" placeholder="7-11" required>
 
       <button type="submit">Sign Up</button>
     </form>
     <p>Already have an account? <a href="index.html">Login here</a></p>
   </div>
 </body>
-
 </html>

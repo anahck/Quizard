@@ -1,7 +1,9 @@
 document.getElementById("login-form").addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    const form = new FormData(e.target)
+    const form = new FormData(e.target);
+    const email = form.get("email");       
+    const password = form.get("password"); 
 
     const options = {
         method: "POST",
@@ -9,18 +11,21 @@ document.getElementById("login-form").addEventListener("submit", async (e) => {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({
-            email: form.get("email"),
-            passwordhash: form.get("password")
-        })
-    }
-    console.log(options);
-    const response = await fetch("http://localhost:3000/users/login", options)
-    const data = await response.json();
+        body: JSON.stringify({ email, passwordhash: password })
+    };
 
-    if (response.status == 200) {
-        alert("Logged in!");
-    } else {
-        alert(data.error);
+    try {
+        const response = await fetch("http://localhost:3000/users/login", options);
+        const data = await response.json();
+
+        if (response.ok) {
+            localStorage.setItem("user", JSON.stringify(data)); 
+            window.location.href = "dashboard.html"; 
+        } else {
+            alert(data.error || "Login failed");
+        }
+    } catch (err) {
+        console.error(err);
+        alert("An error occurred");
     }
-})
+});
