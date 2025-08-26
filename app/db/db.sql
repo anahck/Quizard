@@ -9,7 +9,7 @@ CREATE TABLE userInfo (
     firstName VARCHAR(30) NOT NULL,
     lastName VARCHAR(30) NOT NULL,
     email VARCHAR(30) UNIQUE NOT NULL,
-    passwordHash CHAR(30) NOT NULL,
+    passwordHash CHAR(60) NOT NULL,
     userRole VARCHAR(30) NOT NULL,
     yearGroup INT NOT NULL,
     PRIMARY KEY (userID)
