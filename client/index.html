@@ -1,40 +1,37 @@
 <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="./style.css">
+        <script defer src="./assets/login.js"></script>
+        <title>Quizard!</title>
+    </head>
 
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./style.css">
-    <script defer src="./assets/login.js"></script>
-    <title>Quizard!</title>
-</head>
+    <body>
+        <h1>Quizard!</h1>
 
-<body>
-    <h1>Quizard!</h1>
-
-      <nav>
+        <nav>
             <a href="index.html">Home</a>
             <a href="about.html">About</a>
             <a href="signup.html">Sign up</a>
-     </nav>
+        </nav>
 
-    <div class="container">
-        
-        <form action="" id="login-form">
-            <label for="email">Email:</label>
-            <input type="text" id="email" placeholder="Enter your email">
-            
-            <label for="password">Password:</label>
-            <input type="password" id="password" placeholder="Enter your password"><br>
-            
-            <input type="submit" value="Login">
-        </form>
-        <p>Don’t have an account? <a href="signup.html" id="show-signup"><br>Sign up here</a></p>
-    </div>
+        <div class="container">
 
-<footer>
-  <p>Footer</p>
-</footer>
+            <form action="" id="login-form">
+                <label for="email">Email:</label>
+                <input type="text" id="email" placeholder="Enter your email" name="email">
 
-</body>
+                <label for="password">Password:</label>
+                <input type="password" id="password" placeholder="Enter your password" name="password"><br>
+
+                <input type="submit" value="Login">
+            </form>
+            <p>Don’t have an account? <a href="signup.html" id="show-signup"><br>Sign up here</a></p>
+        </div>
+        <footer>
+            <p>Footer</p>
+        </footer>
+    </body>
 </html>
