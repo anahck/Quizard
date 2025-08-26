@@ -1,40 +1,35 @@
+<!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./style.css">
-    <script defer src="./assets/login.js"></script>
-    <title>Quizard!</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login</title>
+  <link rel="stylesheet" href="./style.css">
+  <script defer src="./js/login.js"></script>
 </head>
-
 <body>
-    <h1>Quizard!</h1>
+  <header>
+    <h1><a href="index.html" class="logo">Quizard</a></h1>
+    <nav>
+      <a href="index.html">Login</a> |
+      <a href="signup.html">Sign Up</a> |
+      <a href="dashboard.html">Dashboard</a> |
+      <a href="about.html">About</a>
+    </nav>
+  </header>
 
-      <nav>
-            <a href="index.html">Home</a>
-            <a href="about.html">About</a>
-            <a href="signup.html">Sign up</a>
-     </nav>
-
-    <div class="container">
-        
-        <form action="" id="login-form">
-            <label for="email">Email:</label>
-            <input type="text" id="email" placeholder="Enter your email">
-            
-            <label for="password">Password:</label>
-            <input type="password" id="password" placeholder="Enter your password"><br>
-            
-            <input type="submit" value="Login">
-        </form>
-        <p>Don’t have an account? <a href="signup.html" id="show-signup"><br>Sign up here</a></p>
-    </div>
-
-<footer>
-  <p>Footer</p>
-</footer>
-
+  <div class="container">
+    <h2>Sign In</h2>
+    <form id="login-form">
+      <label for="username">Username (Email):</label>
+      <input type="text" id="username" name="username" placeholder="Enter your email" required>
+      
+      <label for="password">Password:</label>
+      <input type="password" id="password" name="password" placeholder="Enter your password" required>
+      
+      <button type="submit">Login</button>
+    </form>
+    <p>Don’t have an account? <a href="signup.html">Sign up here</a></p>
+  </div>
 </body>
 </html>
