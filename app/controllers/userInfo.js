@@ -39,6 +39,9 @@ async function create(req, res) {
 //     }
 // }
 
+async function register(req, res) {
+}
+
 module.exports = {
     index,
     showId,
