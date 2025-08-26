@@ -62,6 +62,9 @@ async function destroy(req, res) {
 //     }
 // }
 
+async function register(req, res) {
+}
+
 module.exports = {
     index,
     showId,
