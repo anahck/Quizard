@@ -29,6 +29,29 @@ async function create(req, res) {
     }
 }
 
+async function update(req, res) {
+    try {
+        const id = parseInt(req.params.id)
+        const data = req.body
+        const user = await UserInfo.getOneByID(id)
+        const result = await user.update(data)
+        res.status(200).json(result)
+    } catch (err) {
+        res.status(404).json({ error: err.message })
+    }
+}
+
+async function destroy(req, res) {
+    try {
+        const id = parseInt(req.params.id)
+        const user = await UserInfo.getOneByID(id)
+        await user.destroy()
+        res.status(204).end()
+    } catch (err) {
+        res.status(404).json({ error: err.message })
+    }
+}
+
 // async function showEmail(req, res) {
 //     try {
 //         let email = req.params.email
@@ -42,6 +65,8 @@ async function create(req, res) {
 module.exports = {
     index,
     showId,
-    create
+    create,
+    update,
+    destroy
     //showEmail
 }
