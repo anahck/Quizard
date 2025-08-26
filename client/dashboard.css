@@ -15,9 +15,9 @@ body {
 
 
 h1 {
-  text-align: center;
+  text-align: left;
   color: white;
-  margin-bottom: 20px;
+  margin-left: 20px;
   font-size: 50px;
 }
 
@@ -31,7 +31,6 @@ h2 {
 
 .top-bar {
   display: flex;
-  justify-content: space-between;
   align-items: center;
   background-color: white;
   color: #333;
@@ -41,7 +40,20 @@ h2 {
   border-radius: 10px;
   box-shadow: 0 2px 8px black;
   margin: 20px;
+  position: relative;   
 }
+
+.logo-centre {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.logo-centre img {
+  height: 100px;   
+  width: auto;
+}
+
 
 .dashboard {
   display: grid;
