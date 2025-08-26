@@ -27,6 +27,23 @@ class UserInfo {
         return new UserInfo(response.rows[0])
     }
 
+    static async create(data){
+        const {firstname, lastname, email, passwordhash, userrole, yeargroup} = data
+        const existingUser = await db.query("SELECT email FROM userinfo WHERE email = $1", [email])
+        if(existingUser.rows.length === 0){
+            const response = await db.query("INSERT INTO userinfo (firstname, lastname, email, passwordhash, userrole, yeargroup) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *",
+                [firstname, lastname, email, passwordhash, userrole, yeargroup]);
+            return new UserInfo(response.rows[0])
+        }
+        else{
+            throw new Error("A user with this email already exists")
+        }
+    }
+
+    static async update(data){
+        
+    }
+
     // static async getOneByEmail(user) {
     //     const response = await db.query("SELECT * FROM userinfo WHERE email = $1;", [user])
     //     if (response.rows.length !== 1) {

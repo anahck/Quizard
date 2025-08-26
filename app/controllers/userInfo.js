@@ -19,6 +19,16 @@ async function showId(req, res) {
     }
 }
 
+async function create(req, res) {
+    try {
+        const data = req.body
+        const newUser = await UserInfo.create(data)
+        res.status(201).json(newUser);
+    } catch (err) {
+        res.status(400).json({ "error": err.message })
+    }
+}
+
 // async function showEmail(req, res) {
 //     try {
 //         let email = req.params.email
@@ -32,5 +42,6 @@ async function showId(req, res) {
 module.exports = {
     index,
     showId,
-    showEmail
+    create
+    //showEmail
 }
