@@ -71,16 +71,38 @@ async function register(req, res) {
 
         const salt = await bcrypt.genSalt(parseInt(process.env.BCRYPT_SALT_ROUNDS))
 
-        console.log("data " + data.passwordhash);
-        console.log("salt " + salt);
-
         data["passwordhash"] = await bcrypt.hash(data.passwordhash, salt)
-        console.log(data);
         const result = await UserInfo.create(data)
 
         res.status(201).send(result);
     } catch (error) {
         res.status(400).json({ error: error.message });
+    }
+}
+
+async function login(req, res) {
+    const data = req.body
+    try {
+        const user = await UserInfo.getOneByEmail(data.email)
+        const match = await bcrypt.compare(data.passwordhash, user.passwordhash)
+        if(match){
+            const payload = { email: user.email}
+            const sendToken = (err, token) => {
+                if(err){
+                    throw Error("Error in token generation")
+                }
+                res.status(200).json({
+                    success: true,
+                    token: token
+                })
+            }
+            jwt.sign(payload, process.env.SECRET_TOKEN, { expiresIn: 3600}, sendToken)
+        }
+        else{
+            throw Error("User could not be authenticated")
+        }
+    } catch (error) {
+        res.status(401).json({error: error.message});
     }
 }
 
@@ -90,6 +112,7 @@ module.exports = {
     create,
     update,
     destroy,
-    register
+    register,
+    login
     //showEmail
 }

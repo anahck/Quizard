@@ -27,6 +27,14 @@ class UserInfo {
         return new UserInfo(response.rows[0])
     }
 
+    static async getOneByEmail(user) {
+        const response = await db.query("SELECT * FROM userinfo WHERE email = $1;", [user])
+        if (response.rows.length !== 1) {
+            throw Error("Unable to locate user")
+        }
+        return new UserInfo(response.rows[0])
+    }
+
     static async create(data){
         const {firstname, lastname, email, passwordhash, userrole, yeargroup} = data
         const existingUser = await db.query("SELECT email FROM userinfo WHERE email = $1", [email])
