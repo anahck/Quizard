@@ -1,6 +1,14 @@
 h1 {
     text-align: center;
-    margin-bottom: 50px;
+    color: white;
+    margin-bottom: 20px;
+    font-size: 50px;
+
+}
+
+body {
+    font-family: sans-serif;
+    background-color:#5f5fc8 ;
 }
 
 nav {
@@ -25,7 +33,7 @@ nav a {
 
 nav a:hover {
     background-color: white;
-    color: #0d9488;
+    color: #4bb1a9;
     transform: translateY(-2px);
 }
 
@@ -33,9 +41,16 @@ nav a:hover {
   text-align: center;
   max-width: 600px;
   margin: 0 auto;
-  background-color: #0d9488;
+  background-color: white;
+  border-radius: 10px;
 }
 
 form {
   margin: 100px 0;
+}
+
+input {
+  margin: 20px 0;
+  width: 50%;
+  padding: 10px;
 }
