@@ -4,6 +4,7 @@ const cors = require('cors')
 const userRouter = require('./routes/userInfo')
 const testRouter = require('./routes/tests')
 const subjectRouter = require('./routes/subjects')
+const scoreRouter = require('./routes/scores')
 const logger = require('./middleware/logger')
 
 const app = express()
@@ -14,5 +15,6 @@ app.use(logger)
 app.use('/users', userRouter)
 app.use('/tests', testRouter)
 app.use('/subjects', subjectRouter)
+app.use('/scores', scoreRouter)
 
 module.exports = app

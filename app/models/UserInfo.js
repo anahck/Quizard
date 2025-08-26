@@ -49,17 +49,9 @@ class UserInfo {
     }
 
     async update(data){
-        const updatable = ["firstname", "lastname", "email", "passwordhash", "userrole", "yeargroup"]
-        const fields = Object.keys(data).map(field => field.toLowerCase()).filter(field => updatable.includes(field))
-        if (fields.length === 0) {
-            throw Error("No valid fields to update")
-        }
+        const { firstname, lastname, email, passwordhash, userrole, yeargroup } = data
 
-        const setClause = fields.map((field, index) => `${field} = $${index + 1}`).join(", ")
-        const values = fields.map(field => data[field])
-        values.push(this.userid)
-
-        const response = await db.query(`UPDATE userinfo SET ${setClause} WHERE userid = $${values.length} RETURNING *;`, values)
+        const response = await db.query("UPDATE userinfo SET firstname = COALESCE($1, firstname), lastname = COALESCE($2, lastname), email = COALESCE($3, email), passwordhash = COALESCE($4, passwordhash), userrole = COALESCE($5, userrole), yeargroup = COALESCE($6, yeargroup) WHERE userid = $7 RETURNING *;", [firstname, lastname, email, passwordhash, userrole, yeargroup, this.userid])
         if (response.rows.length !== 1) {
             throw Error("Unable to update user")
         }
