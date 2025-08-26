@@ -1,3 +1,6 @@
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+
 const UserInfo = require('../models/UserInfo')
 
 async function index(req, res) {
@@ -63,6 +66,22 @@ async function destroy(req, res) {
 // }
 
 async function register(req, res) {
+    try {
+        const data = req.body
+
+        const salt = await bcrypt.genSalt(parseInt(process.env.BCRYPT_SALT_ROUNDS))
+
+        console.log("data " + data.passwordhash);
+        console.log("salt " + salt);
+
+        data["passwordhash"] = await bcrypt.hash(data.passwordhash, salt)
+        console.log(data);
+        const result = await UserInfo.create(data)
+
+        res.status(201).send(result);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
 }
 
 module.exports = {
@@ -70,6 +89,7 @@ module.exports = {
     showId,
     create,
     update,
-    destroy
+    destroy,
+    register
     //showEmail
 }
