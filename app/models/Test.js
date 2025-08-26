@@ -29,8 +29,8 @@ class Test {
     static async create(data){
         const {testname, subjectid, duedate, assigneddate, authorid} = data
         const existingTest = await db.query("SELECT testname FROM test WHERE testname = $1;", [testname])
-        const existingSubject = await db.query("SELECT subjectid FROM subjects WHERE subjectID = $1;", [subjectid])
-        const existingAuthor = await db.query("SELECT userID FROM userInfo WHERE userID = $1;", [authorid])
+        const existingSubject = await db.query("SELECT subjectid FROM subjects WHERE subjectid = $1;", [subjectid])
+        const existingAuthor = await db.query("SELECT userid FROM userinfo WHERE userid = $1;", [authorid])
         
         if (existingSubject.rows.length === 0) {
             throw Error("A subject with this ID does not exist")
@@ -46,6 +46,28 @@ class Test {
         else{
             throw Error("A test with this name already exists")
         }
+    }
+
+    async update(data){
+        const updatable = ["testname", "subjectid", "duedate", "authorid"]
+        const fields = Object.keys(data).map(field => field.toLowerCase()).filter(field => updatable.includes(field))
+        if (fields.length === 0) {
+            throw Error("No valid fields to update")
+        }
+
+        const setClause = fields.map((field, index) => `${field} = $${index + 1}`).join(", ")
+        const values = fields.map(field => data[field])
+        values.push(this.testid)
+
+        const response = await db.query(`UPDATE test SET ${setClause} WHERE testid = $${values.length} RETURNING *;`, values)
+        if (response.rows.length !== 1) {
+            throw Error("Unable to update test")
+        }
+        return new Test(response.rows[0]) 
+    }
+
+    async destroy() {
+        const response = await db.query("DELETE FROM test WHERE testid = $1;", [this.testid])
     }
 }
 
