@@ -28,14 +28,23 @@ class Test {
 
     static async create(data){
         const {testname, subjectid, duedate, assigneddate, authorid} = data
-        const existingUser = await db.query("SELECT email FROM userinfo WHERE email = $1", [email])
-        if(existingUser.rows.length === 0){
-            const response = await db.query("INSERT INTO userinfo (firstname, lastname, email, passwordhash, userrole, yeargroup) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *",
-                [firstname, lastname, email, passwordhash, userrole, yeargroup]);
-            return new UserInfo(response.rows[0])
+        const existingTest = await db.query("SELECT testname FROM test WHERE testname = $1;", [testname])
+        const existingSubject = await db.query("SELECT subjectid FROM subjects WHERE subjectID = $1;", [subjectid])
+        const existingAuthor = await db.query("SELECT userID FROM userInfo WHERE userID = $1;", [authorid])
+        
+        if (existingSubject.rows.length === 0) {
+            throw Error("A subject with this ID does not exist")
+        }
+        if (existingAuthor.rows.length === 0) {
+            throw Error("An author with this ID does not exist")
+        }
+        if(existingTest.rows.length === 0){
+            const response = await db.query("INSERT INTO test (testname, subjectid, duedate, assigneddate, authorid) VALUES ($1, $2, $3, $4, $5) RETURNING *",
+                [testname, subjectid, duedate, assigneddate, authorid])
+            return new Test(response.rows[0])
         }
         else{
-            throw new Error("A user with this email already exists")
+            throw Error("A test with this name already exists")
         }
     }
 }
