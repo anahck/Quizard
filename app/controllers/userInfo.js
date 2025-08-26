@@ -1,3 +1,6 @@
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+
 const UserInfo = require('../models/UserInfo')
 
 async function index(req, res) {
@@ -29,6 +32,29 @@ async function create(req, res) {
     }
 }
 
+async function update(req, res) {
+    try {
+        const id = parseInt(req.params.id)
+        const data = req.body
+        const user = await UserInfo.getOneByID(id)
+        const result = await user.update(data)
+        res.status(200).json(result)
+    } catch (err) {
+        res.status(404).json({ error: err.message })
+    }
+}
+
+async function destroy(req, res) {
+    try {
+        const id = parseInt(req.params.id)
+        const user = await UserInfo.getOneByID(id)
+        await user.destroy()
+        res.status(204).end()
+    } catch (err) {
+        res.status(404).json({ error: err.message })
+    }
+}
+
 // async function showEmail(req, res) {
 //     try {
 //         let email = req.params.email
@@ -39,9 +65,31 @@ async function create(req, res) {
 //     }
 // }
 
+async function register(req, res) {
+    try {
+        const data = req.body
+
+        const salt = await bcrypt.genSalt(parseInt(process.env.BCRYPT_SALT_ROUNDS))
+
+        console.log("data " + data.passwordhash);
+        console.log("salt " + salt);
+
+        data["passwordhash"] = await bcrypt.hash(data.passwordhash, salt)
+        console.log(data);
+        const result = await UserInfo.create(data)
+
+        res.status(201).send(result);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+}
+
 module.exports = {
     index,
     showId,
-    create
+    create,
+    update,
+    destroy,
+    register
     //showEmail
 }

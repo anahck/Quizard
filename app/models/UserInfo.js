@@ -40,8 +40,26 @@ class UserInfo {
         }
     }
 
-    static async update(data){
-        
+    async update(data){
+        const updatable = ["firstname", "lastname", "email", "passwordhash", "userrole", "yeargroup"]
+        const fields = Object.keys(data).map(field => field.toLowerCase()).filter(field => updatable.includes(field))
+        if (fields.length === 0) {
+            throw Error("No valid fields to update")
+        }
+
+        const setClause = fields.map((field, index) => `${field} = $${index + 1}`).join(", ")
+        const values = fields.map(field => data[field])
+        values.push(this.userid)
+
+        const response = await db.query(`UPDATE userinfo SET ${setClause} WHERE userid = $${values.length} RETURNING *;`, values)
+        if (response.rows.length !== 1) {
+            throw Error("Unable to update user")
+        }
+        return new UserInfo(response.rows[0]) 
+    }
+
+    async destroy() {
+        const response = await db.query("DELETE FROM userinfo WHERE userid = $1;", [this.userid])
     }
 
     // static async getOneByEmail(user) {
