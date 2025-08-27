@@ -48,14 +48,69 @@ document.addEventListener("DOMContentLoaded", async () => {
       }
     });
 
-    submitBtn.addEventListener("click", () => {
-      saveAnswer();
-      console.log("Submitted answers:", answers);
-      questionContainer.innerHTML = `<p>Quiz submitted!</p>`;
-      prevBtn.style.display = "none";
-      nextBtn.style.display = "none";
-      submitBtn.style.display = "none";
-    });
+//     submitBtn.addEventListener("click", () => {
+//       saveAnswer();
+
+//     let score = 0;
+//     questions.forEach(q => {
+//         if (answers[q.questionid]?.trim().toLowerCase() === q.answer.trim().toLowerCase()) {
+//             score += q.totalScore || 1
+//         }
+//     })
+
+//   console.log("Your score:", score);
+
+//       console.log("Submitted answers:", answers);
+//       questionContainer.innerHTML = `<p>Quiz submitted!</p>`;
+//       prevBtn.style.display = "none";
+//       nextBtn.style.display = "none";
+//       submitBtn.style.display = "none";
+    // });
+    
+    submitBtn.addEventListener("click", async () => {
+    saveAnswer(); // save the last question
+
+    try {
+        const response = await fetch("http://localhost:3000/questions/checkanswers", {
+            method: "POST",
+            headers: { 
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${localStorage.getItem("token")}`,
+            },
+            body: JSON.stringify({
+                testId: parseInt(quizId),
+                answers: questions.map(question => ({
+                    questionId: question.questionid,
+                    answer: (answers[question.questionid] || "").trim()
+                }))
+            })
+        })
+
+
+        let result;
+            const text = await response.text(); // read once
+            try {
+                result = JSON.parse(text); // attempt JSON parse
+            } catch {
+                throw new Error(`Non-JSON response from server: ${text}`);
+            }
+        
+        // const result = await response.json();
+
+        if (response.ok) {
+            questionContainer.innerHTML = `<p>Quiz submitted! Your score: ${result.totalScore}</p>`;
+            prevBtn.style.display = "none";
+            nextBtn.style.display = "none";
+            submitBtn.style.display = "none";
+        } else {
+            questionContainer.innerHTML = `<p>Error submitting quiz: ${result.error}</p>`;
+        }
+
+    } catch (err) {
+        console.error(err);
+        questionContainer.innerHTML = `<p>Error submitting quiz: ${err.message}</p>`;
+    }
+})
 
   } catch (error) {
     console.error("Error loading quiz:", error);
