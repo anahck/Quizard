@@ -12,29 +12,20 @@
   <header class="quiz-header">
     <h1><a href="dashboard.html" class="logo">Quizard</a></h1>
     <div class="quiz-title">
-      <h2 id="quiz-name">Quiz Title</h2>
+      <h2 id="quiz-name">Loading quiz...</h2>
     </div>
   </header>
 
   <main class="quiz-container">
-    <div id="question-container">
-    
-      <h3 id="question-text">Loading question...</h3>
+    <form id="quiz-form">
+      <div id="question-container">
+        <!-- Questions will be inserted here dynamically -->
+      </div>
 
-      
-      <input 
-        type="text" 
-        id="answer-input" 
-        placeholder="Type your answer here" 
-        autocomplete="off"
-      />
-    </div>
-
-    <div class="quiz-controls">
-      <button id="prev-btn">Previous</button>
-      <button id="next-btn">Next</button>
-      <button id="submit-btn">Submit Answer</button>
-    </div>
+      <div class="quiz-controls">
+        <button type="submit" id="submit-btn">Submit Quiz</button>
+      </div>
+    </form>
   </main>
 
 </body>
