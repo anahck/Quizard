@@ -1,7 +1,6 @@
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-
 const UserInfo = require('../models/UserInfo')
+
+const otpStore = {};
 
 async function index(req, res) {
     try {
@@ -65,54 +64,11 @@ async function destroy(req, res) {
 //     }
 // }
 
-async function register(req, res) {
-    try {
-        const data = req.body
-
-        const salt = await bcrypt.genSalt(parseInt(process.env.BCRYPT_SALT_ROUNDS))
-
-        data["passwordhash"] = await bcrypt.hash(data.passwordhash, salt)
-        const result = await UserInfo.create(data)
-
-        res.status(201).send(result);
-    } catch (error) {
-        res.status(400).json({ error: error.message });
-    }
-}
-
-async function login(req, res) {
-    const data = req.body
-    try {
-        const user = await UserInfo.getOneByEmail(data.email)
-        const match = await bcrypt.compare(data.passwordhash, user.passwordhash)
-        if(match){
-            const payload = { email: user.email}
-            const sendToken = (err, token) => {
-                if(err){
-                    throw Error("Error in token generation")
-                }
-                res.status(200).json({
-                    success: true,
-                    token: token
-                })
-            }
-            jwt.sign(payload, process.env.SECRET_TOKEN, { expiresIn: 3600}, sendToken)
-        }
-        else{
-            throw Error("User could not be authenticated")
-        }
-    } catch (error) {
-        res.status(401).json({error: error.message});
-    }
-}
-
 module.exports = {
     index,
     showId,
     create,
     update,
-    destroy,
-    register,
-    login
+    destroy
     //showEmail
 }
