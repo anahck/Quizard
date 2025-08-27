@@ -19,4 +19,11 @@ app.use('/subjects', subjectRouter)
 app.use('/scores', scoreRouter)
 app.use('/questions', questionRouter)
 
+app.get("/", (req, res) => {
+  res.status(200).json({
+    title: "Quizards API",
+    description: "Learn about non-STEM subjects with these interactive online quizzes!"
+  })
+})
+
 module.exports = app
