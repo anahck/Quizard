@@ -51,7 +51,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     submitBtn.addEventListener("click", () => {
       saveAnswer();
       console.log("Submitted answers:", answers);
-      questionContainer.innerHTML = `<p>✅ Quiz submitted!</p>`;
+      questionContainer.innerHTML = `<p>Quiz submitted!</p>`;
       prevBtn.style.display = "none";
       nextBtn.style.display = "none";
       submitBtn.style.display = "none";

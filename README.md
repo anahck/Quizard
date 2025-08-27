@@ -8,4 +8,6 @@ DB_URL=postgresql://postgres.sgwujlfmrpnkxayhhcxu:quizards@aws-1-eu-west-2.poole
 PORT=3000
 BCRYPT_SALT_ROUNDS=10
 SECRET_TOKEN=1513A942C9C1B04F8E31080D4E5657FD9E7D05D468712953DD8248C5FAB04450
+EMAIL_USER=quizardsapp@gmail.com
+EMAIL_PASS=wxiw rtyq myzd lrvn
 ```
