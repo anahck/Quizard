@@ -1,4 +1,5 @@
 const { Router } = require('express')
+// const authenticator = require('../middleware/authenticator')
 
 const questionController = require('../controllers/questions')
 
@@ -10,6 +11,7 @@ questionRouter.get('/:id', questionController.showQId)
 questionRouter.post('/', questionController.create)
 questionRouter.patch('/:id', questionController.update)
 questionRouter.delete('/:id', questionController.destroy)
+// questionRouter.post('/checkanswers', authenticator, questionController.checkAnswers)
 questionRouter.post('/checkanswers', questionController.checkAnswers)
 
 module.exports = questionRouter

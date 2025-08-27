@@ -20,6 +20,7 @@ document.getElementById("login-form").addEventListener("submit", async (e) => {
     if (response.status == 200) {
         if (data.token) {
             localStorage.setItem("token", data.token);
+            localStorage.setItem("userid", data.userid);
             window.location.assign("dashboard.html");
         } else {
             document.getElementById("otp-container").style.display = "block";
@@ -47,6 +48,7 @@ document.getElementById("otp-submit").addEventListener("click", async () => {
     const data = await response.json();
     if (response.status == 200) {
         localStorage.setItem("token", data.token);
+        localStorage.setItem("userid", data.id.userid);
         window.location.assign("dashboard.html");
     } else {
         alert(data.error);

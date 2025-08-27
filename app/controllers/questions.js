@@ -66,7 +66,7 @@ async function destroy(req, res) {
 async function checkAnswers(req, res) {
     try {
         const { testId, answers } = req.body
-        const userId = req.user.id
+        const userId = req.body.userId
 
         // Get correct answers and total points
         const questions = await Question.getAnswersByTestID(testId)

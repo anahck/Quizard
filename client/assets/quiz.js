@@ -78,6 +78,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 "Authorization": `Bearer ${localStorage.getItem("token")}`,
             },
             body: JSON.stringify({
+                userId: localStorage.getItem("userid"),
                 testId: parseInt(quizId),
                 answers: questions.map(question => ({
                     questionId: question.questionid,
