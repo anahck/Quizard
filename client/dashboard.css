@@ -31,6 +31,7 @@ h2 {
 
 .top-bar {
   display: flex;
+  justify-content: space-between;  
   align-items: center;
   background-color: white;
   color: #333;
@@ -40,17 +41,27 @@ h2 {
   border-radius: 10px;
   box-shadow: 0 2px 8px black;
   margin: 20px;
-  position: relative;   
 }
 
-.logo-centre {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
+
+.logo-header {
+  display: flex;
+  align-items: center;       
+  justify-content: center;    
+  position: relative;
+  margin: 20px;
+}
+
+.logo-header h1 {
+  margin: 0;
+  font-size: 50px;
+  color: white;
+  position: absolute;  
+  left: 20px;
 }
 
 .logo-centre img {
-  height: 100px;   
+  height: 70px;   
   width: auto;
 }
 
