@@ -89,11 +89,11 @@ VALUES
 ('What year did the Berlin Wall fall?', 3, 10, '1989'),
 ('Who was the Soviet leader during the Cuban Missile Crisis?', 3, 10, 'Nikita Khrushchev');
 
-INSERT INTO scores (userID, testID, score, scoreDate)
+INSERT INTO scores (userID, testID, score, scoreDate, attempt)
 VALUES
-(1, 1, 18.00, '2025-08-20'),  -- Alice: WWII Basics
-(2, 1, 15.00, '2025-08-20'),  -- Bob: WWII Basics
-(1, 2, 25.00, '2025-08-22'),  -- Alice: Ancient Civilizations
-(2, 3, 20.00, '2025-08-23');  -- Bob: Cold War
+(1, 1, 18.00, '2025-08-20', 1),  -- Alice: WWII Basics
+(2, 1, 15.00, '2025-08-20', 1),  -- Bob: WWII Basics
+(1, 2, 25.00, '2025-08-22', 1),  -- Alice: Ancient Civilizations
+(2, 3, 20.00, '2025-08-23', 1);  -- Bob: Cold War
 
 

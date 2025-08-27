@@ -1,12 +1,13 @@
 const db = require('../db/connect')
 
 class Score {
-    constructor({ scoreid, userid, testid, score, scoredate }) {
+    constructor({ scoreid, userid, testid, score, scoredate, attempt }) {
         this.scoreid = scoreid
         this.userid = userid
         this.testid = testid
         this.score = score
         this.scoredate = scoredate
+        this.attempt = attempt
     }
 
     static async getAll() {
