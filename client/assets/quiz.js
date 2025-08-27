@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     try {
         const testResponse = await fetch(`http://localhost:3000/tests/${quizId}`);
         const testData = await testResponse.json();
-        quizNameEl.textContent = testData.testname;
+        quizNameElement.textContent = testData.testname;
         
         const questionsResponse = await fetch(`http://localhost:3000/questions/tests/${quizId}`)
         const questions = await questionsResponse.json()

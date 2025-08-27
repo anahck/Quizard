@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         const response = await fetch("http://localhost:3000/tests");
         const tests = await response.json();
 
-        quizListSection.innerHTML = tests.map(test => `
+        quizListUl.innerHTML = tests.map(test => `
             <li>
                 <a href="quiz.html?id=${test.testid}">${test.testname}</a>
             </li>`).join("")
