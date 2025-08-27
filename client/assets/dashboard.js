@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", async () => {
     const quizSection = document.getElementById("quiz");
-    const scoresSection = document.getElementById("scores");
+    const scoresSectcion = document.getElementById("scores");
     const pastSection = document.getElementById("past");
     const quizListSection = document.querySelector(".quiz-list")
     const quizListUl = document.getElementById("quiz-list-ul")
