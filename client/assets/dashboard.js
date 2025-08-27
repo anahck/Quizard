@@ -3,6 +3,20 @@ document.addEventListener("DOMContentLoaded", async () => {
     const scoresSection = document.getElementById("scores");
     const pastSection = document.getElementById("past");
     const quizListSection = document.querySelector(".quiz-list")
+    const quizListUl = document.getElementById("quiz-list-ul")
+
+    try {
+        const response = await fetch("http://localhost:3000/tests");
+        const tests = await response.json();
+
+        quizListSection.innerHTML = tests.map(test => `
+            <li>
+                <a href="quiz.html?id=${test.testid}">${test.testname}</a>
+            </li>`).join("")
+        
+    } catch (err) {
+        quizListSection.innerHTML = `<p>Error loading quizzes: ${err.message}</p>`;
+    }
 
     // quizSection.classList.remove("hidden");
 
@@ -54,17 +68,4 @@ document.addEventListener("DOMContentLoaded", async () => {
         });
     });
 
-    try {
-        const response = await fetch("http://localhost:3000/tests");
-        const tests = await response.json();
-
-        quizListSection.innerHTML = `
-            <h3>Available Quizzes</h3>
-            <ul>
-                ${tests.map(t => `<li>${t.testname}</li>`).join("")}
-            </ul>
-        `;
-    } catch (err) {
-        quizListSection.innerHTML = `<p>Error loading quizzes: ${err.message}</p>`;
-    }
 });
