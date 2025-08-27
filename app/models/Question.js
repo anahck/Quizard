@@ -57,23 +57,50 @@ class Question {
         const response = await db.query("DELETE FROM questions WHERE questionid = $1;", [this.questionid])
     }
 
-    static async getAnswers(){
-        const response = await db.query("SELECT * FROM questions;")
+    // static async getAnswers(){
+    //     const response = await db.query("SELECT * FROM questions;")
+    //     if (response.rows.length === 0) {
+    //         throw Error("No questions available")
+    //     }
+    //     return response.rows.map(row => row.answer)
+    // }
+
+    // static async updateScore(userid, testid, score){
+    //     const response = await db.query("UPDATE scores SET score = $1 WHERE userid = $2 and testid = $3 RETURNING *;",
+    //   [score, userid, testid]);
+
+    //     if (response.rows.length != 1) {
+    //         throw new Error("Unable to update score.")
+    //     }
+
+    //     return response.rows[0];
+    // }
+
+    static async getAnswersByTestID(testid) {
+        const response = await db.query("SELECT questionid, answer, totalscore FROM questions WHERE testid = $1;", [testid])
         if (response.rows.length === 0) {
-            throw Error("No questions available")
+            throw new Error("No questions available")
         }
-        return response.rows.map(row => row.answer)
+        return response.rows.map(row => ({
+            questionId: row.questionid,
+            answer: row.answer,
+            totalScore: row.totalscore
+        }))
     }
 
-    static async updateScore(userid, testid, score){
-        const response = await db.query("UPDATE scores SET score = $1 WHERE userid = $2 and testid = $3 RETURNING *;",
-      [score, userid, testid]);
+    static async saveScore({ userid, testid, score }) {
+        // Check if a score already exists
+        const existingScore = await db.query("SELECT * FROM scores WHERE userid = $1 AND testid = $2", [userid, testid])
 
-        if (response.rows.length != 1) {
-            throw new Error("Unable to update score.")
+        if (existingScore.rows.length === 0) {
+            // Insert new score
+            const response = await db.query("INSERT INTO scores (userid, testid, score, scoredate) VALUES ($1, $2, $3, $4) RETURNING *;", [userid, testid, score, new Date()])
+            return response.rows[0]
+        } else {
+            // Update existing score
+            const response = await db.query("UPDATE scores SET score = $1, scoredate = $2 WHERE userid = $3 AND testid = $4 RETURNING *;", [score, new Date(), userid, testid])
+            return response.rows[0]
         }
-
-        return response.rows[0];
     }
 
 }

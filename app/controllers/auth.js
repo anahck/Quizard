@@ -33,7 +33,7 @@ async function login(req, res) {
             const payload = { email: user.email };
             jwt.sign(payload, process.env.SECRET_TOKEN, { expiresIn: 3600 }, (err, token) => {
                 if (err)return res.status(500).json({ error: 'Error in token generation' });
-                res.status(200).json({ success: true, token, userid: user.userid});
+                res.status(200).json({ success: true, token, userid: user.userid });
             });
         } else {
             const otp = (Math.floor(100000 + Math.random() * 900000)).toString();
