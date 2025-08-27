@@ -28,28 +28,37 @@ async function login(req, res) {
         if (!match) {
             return res.status(401).json({ error: "Invalid credentials" });
         }
-        const otp = (Math.floor(100000 + Math.random() * 900000)).toString();
-        otpStore[user.email] = {
-            otp,
-            expires: Date.now() + 5 * 60 * 1000 // 5 minutes
-        };
-        const transporter = nodemailer.createTransport({
-            service: 'gmail',
-            auth: {
-                user: process.env.EMAIL_USER,
-                pass: process.env.EMAIL_PASS
-            },
-            tls: {
-                rejectUnauthorized: false
-            }
-        });
-        await transporter.sendMail({
-            from: process.env.EMAIL_USER,
-            to: user.email,
-            subject: 'Your Quizard OTP',
-            text: `Your OTP is: ${otp}`
-        });
-        res.status(200).json({ success: true, message: 'OTP sent to email.' });
+        if (user.userrole.toLowerCase() == 'developer') {
+            // Bypass MFA for developer accounts
+            const payload = { email: user.email };
+            jwt.sign(payload, process.env.SECRET_TOKEN, { expiresIn: 3600 }, (err, token) => {
+                if (err)return res.status(500).json({ error: 'Error in token generation' });
+                res.status(200).json({ success: true, token });
+            });
+        } else {
+            const otp = (Math.floor(100000 + Math.random() * 900000)).toString();
+            otpStore[user.email] = {
+                otp,
+                expires: Date.now() + 5 * 60 * 1000 // 5 minutes
+            };
+            const transporter = nodemailer.createTransport({
+                service: 'gmail',
+                auth: {
+                    user: process.env.EMAIL_USER,
+                    pass: process.env.EMAIL_PASS
+                },
+                tls: {
+                    rejectUnauthorized: false
+                }
+            });
+            await transporter.sendMail({
+                from: process.env.EMAIL_USER,
+                to: user.email,
+                subject: 'Your Quizard OTP',
+                text: `Your OTP is: ${otp}`
+            });
+            res.status(200).json({ success: true, message: 'OTP sent to email.' });
+        }
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
