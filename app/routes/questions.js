@@ -10,5 +10,6 @@ questionRouter.get('/tests/:id', questionController.showTestId)
 questionRouter.post('/', questionController.create)
 questionRouter.patch('/:id', questionController.update)
 questionRouter.delete('/:id', questionController.destroy)
+questionRouter.post('/', questionController.checkanswers)
 
 module.exports = questionRouter
