@@ -20,7 +20,12 @@ document.addEventListener("DOMContentLoaded", async () => {
     const testResponse = await fetch(`http://localhost:3000/tests/${quizId}`);
     const testData = await testResponse.json();
 
-    quizNameElement.textContent = `${testData.subjectname} - ${testData.testname}`;
+    const subjectId = testData.subjectid
+
+    const subjectResponse = await fetch(`http://localhost:3000/subjects/${subjectId}`);
+    const subjectData = await subjectResponse.json();
+
+    quizNameElement.textContent = `${subjectData.subjectname} - ${testData.testname}`;
 
     const questionsResponse = await fetch(`http://localhost:3000/questions/tests/${quizId}`);
     questions = await questionsResponse.json();
