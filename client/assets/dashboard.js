@@ -2,10 +2,26 @@ document.addEventListener("DOMContentLoaded", async () => {
     const quizSection = document.getElementById("quiz");
     const scoresSection = document.getElementById("scores");
     const pastSection = document.getElementById("past");
+    const quizListSection = document.querySelector(".quiz-list")
+    const quizListUl = document.getElementById("quiz-list-ul")
 
-    quizSection.classList.remove("hidden");
+    try {
+        const response = await fetch("http://localhost:3000/tests");
+        const tests = await response.json();
 
-    const menuLinks = document.querySelectorAll("#dashboard-menu a");
+        quizListUl.innerHTML = tests.map(test => `
+            <li>
+                <a href="quiz.html?id=${test.testid}">${test.testname}</a>
+            </li>`).join("")
+        
+    } catch (err) {
+        quizListSection.innerHTML = `<p>Error loading quizzes: ${err.message}</p>`;
+    }
+
+    // quizSection.classList.remove("hidden");
+
+    // const menuLinks = document.querySelectorAll("#dashboard-menu a");
+    const menuLinks = document.querySelectorAll(".navbar a");
     const sections = document.querySelectorAll(".content");
 
     menuLinks.forEach(link => {
@@ -20,12 +36,16 @@ document.addEventListener("DOMContentLoaded", async () => {
             section.classList.remove("hidden");
             try {
                 if (target === "quiz") {
-                    const response = await fetch("http://localhost:3000/quizzes");
+                    const response = await fetch("http://localhost:3000/tests");
                     const quizzes = await response.json();
-                    section.innerHTML = `<h3>Start a New Quiz</h3><ul>` +
-                        quizzes.map(q => `<li>${testName}</li>`).join("") +
-                        `</ul>`;
-                }
+                    // section.innerHTML = `<h3>Start a New Quiz</h3><ul>` +
+                    //     quizzes.map(q => `<li>${testName}</li>`).join("") +
+                    //     `</ul>`;
+                        section.innerHTML = `<h3>Available quizzes</h3>
+                        <ul> ${tests.map(test => `<li><a href="#" class="quiz-item" data-id="${test.testid}">
+                            ${test.testname}
+                            </a>
+                            </li>`).join("")}</ul>`
 
                 if (target === "scores") {
                     const response = await fetch("http://localhost:3000/scores");
@@ -41,11 +61,13 @@ document.addEventListener("DOMContentLoaded", async () => {
                         past.map(p => `<li>${testName} – ${score}</li>`).join("") +
                         `</ul>`;
                 }
+            }
             } catch (err) {
                 section.innerHTML = `<p>Error loading data: ${err.message}</p>`;
             }
         });
     });
+
 });
 
 async function loadPosts () {
