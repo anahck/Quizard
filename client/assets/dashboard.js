@@ -47,3 +47,20 @@ document.addEventListener("DOMContentLoaded", async () => {
         });
     });
 });
+
+async function loadPosts () {
+    const options = {
+        headers: {
+          Authorization: localStorage.getItem("token"),
+        },
+      };
+      
+    const response = await fetch("http://localhost:3000/users", options);
+
+    if (response.status != 200) {
+        window.location.assign("./index.html");
+    }
+
+}
+
+loadPosts();

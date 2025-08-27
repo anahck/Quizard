@@ -6,6 +6,7 @@ const testRouter = require('./routes/tests')
 const subjectRouter = require('./routes/subjects')
 const scoreRouter = require('./routes/scores')
 const questionRouter = require('./routes/questions')
+const authRouter = require('./routes/auth')
 const logger = require('./middleware/logger')
 
 const app = express()
@@ -18,5 +19,6 @@ app.use('/tests', testRouter)
 app.use('/subjects', subjectRouter)
 app.use('/scores', scoreRouter)
 app.use('/questions', questionRouter)
+app.use('/auth', authRouter)
 
 module.exports = app

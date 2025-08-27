@@ -14,14 +14,36 @@ document.getElementById("login-form").addEventListener("submit", async (e) => {
             passwordhash: form.get("password")
         })
     }
-    console.log(options);
-    const response = await fetch("http://localhost:3000/users/login", options)
+    const response = await fetch("http://localhost:3000/auth/login", options)
     const data = await response.json();
 
     if (response.status == 200) {
-        localStorage.setItem("token", data.token);
-        window.location.assign("board.html");
+        document.getElementById("otp-container").style.display = "block";
+        document.getElementById("email").disabled = true;
+        document.getElementById("password").disabled = true;
+        document.querySelector("button[type='submit']").disabled = true;
     } else {
         alert(data.error);
     }
 })
+
+document.getElementById("otp-submit").addEventListener("click", async () => {
+    const email = document.getElementById("email").value;
+    const otp = document.getElementById("otp").value;
+    const options = {
+        method: "POST",
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ email, otp })
+    };
+    const response = await fetch("http://localhost:3000/auth/verify-otp", options);
+    const data = await response.json();
+    if (response.status == 200) {
+        localStorage.setItem("token", data.token);
+        window.location.assign("dashboard.html");
+    } else {
+        alert(data.error);
+    }
+});
