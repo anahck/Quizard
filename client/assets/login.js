@@ -18,10 +18,15 @@ document.getElementById("login-form").addEventListener("submit", async (e) => {
     const data = await response.json();
 
     if (response.status == 200) {
-        document.getElementById("otp-container").style.display = "block";
-        document.getElementById("email").disabled = true;
-        document.getElementById("password").disabled = true;
-        document.querySelector("button[type='submit']").disabled = true;
+        if (data.token) {
+            localStorage.setItem("token", data.token);
+            window.location.assign("dashboard.html");
+        } else {
+            document.getElementById("otp-container").style.display = "block";
+            document.getElementById("email").disabled = true;
+            document.getElementById("password").disabled = true;
+            document.querySelector("button[type='submit']").disabled = true;
+        }
     } else {
         alert(data.error);
     }
