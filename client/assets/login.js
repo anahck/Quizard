@@ -48,7 +48,7 @@ document.getElementById("otp-submit").addEventListener("click", async () => {
     const data = await response.json();
     if (response.status == 200) {
         localStorage.setItem("token", data.token);
-        localStorage.setItem("userid", data.id.userid);
+        localStorage.setItem("userid", data.userid);
         window.location.assign("dashboard.html");
     } else {
         alert(data.error);

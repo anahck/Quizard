@@ -39,6 +39,7 @@ CREATE TABLE scores(
     testID INT NOT NULL,
     score INT NOT NULL,
     scoreDate DATE NOT NULL,
+    attempt INT NOT NULL DEFAULT 1,
     PRIMARY KEY (scoreID),
     FOREIGN KEY (userID) REFERENCES userInfo(userID) ON DELETE CASCADE,
     FOREIGN KEY (testID) REFERENCES test(testID) ON DELETE CASCADE
