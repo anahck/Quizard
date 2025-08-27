@@ -33,7 +33,7 @@ async function login(req, res) {
             const payload = { email: user.email };
             jwt.sign(payload, process.env.SECRET_TOKEN, { expiresIn: 3600 }, (err, token) => {
                 if (err)return res.status(500).json({ error: 'Error in token generation' });
-                res.status(200).json({ success: true, token });
+                res.status(200).json({ success: true, token, userid: user.userid});
             });
         } else {
             const otp = (Math.floor(100000 + Math.random() * 900000)).toString();
@@ -67,6 +67,7 @@ async function login(req, res) {
 async function verifyOtp(req, res) {
     try {
         const data = req.body;
+        const user = await UserInfo.getOneByEmail(data.email);
         const record = otpStore[data.email];
         if (!record) {
             return res.status(400).json({ error: 'No OTP requested for this email' });
@@ -84,7 +85,7 @@ async function verifyOtp(req, res) {
                 return res.status(500).json({ error: 'Error in token generation' });
             }
             delete otpStore[data.email];
-            res.status(200).json({ success: true, token });
+            res.status(200).json({ success: true, token, userid: user.userid });
         });
     } catch (err) {
         res.status(500).json({ error: err.message });

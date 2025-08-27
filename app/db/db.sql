@@ -58,7 +58,8 @@ VALUES
 ('Alice', 'Johnson', 'alice@example.com', 'hashedpassword123', 'student', 10),
 ('Bob', 'Smith', 'bob@example.com', 'hashedpassword456', 'student', 11),
 ('Charlie', 'Brown', 'charlie@example.com', 'hashedpassword789', 'teacher', 0),
-('Diana', 'Prince', 'diana@example.com', 'hashedpassword321', 'teacher', 0);
+('Diana', 'Prince', 'diana@example.com', 'hashedpassword321', 'teacher', 0),
+('dev', 'dev', 'quizardsapp@gmail.com', '$2b$10$IPgtDZlNLglJPoKy4FJIlunK6eDTD3GJ8b0Ircf.PgEJLNEEC/wo6', 'developer', 0);
 
 INSERT INTO subjects (subjectName)
 VALUES
