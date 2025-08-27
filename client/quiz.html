@@ -9,7 +9,7 @@
 </head>
 <body>
 
-    <header class="quiz-header">
+  <header class="quiz-header">
     <h1><a href="dashboard.html" class="logo">Quizard</a></h1>
     <div class="quiz-title">
       <h2 id="quiz-name">Quiz Title</h2>
@@ -18,13 +18,22 @@
 
   <main class="quiz-container">
     <div id="question-container">
-      <!-- Questions will be loaded here dynamically -->
+    
+      <h3 id="question-text">Loading question...</h3>
+
+      
+      <input 
+        type="text" 
+        id="answer-input" 
+        placeholder="Type your answer here" 
+        autocomplete="off"
+      />
     </div>
 
     <div class="quiz-controls">
       <button id="prev-btn">Previous</button>
       <button id="next-btn">Next</button>
-      <button id="submit-btn">Submit Quiz</button>
+      <button id="submit-btn">Submit Answer</button>
     </div>
   </main>
 
