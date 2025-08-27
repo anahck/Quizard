@@ -68,7 +68,6 @@ async function checkAnswers(req, res) {
         const { testId, answers } = req.body
         const userId = req.body.userId
 
-        // Get correct answers and total points
         const questions = await Question.getAnswersByTestID(testId)
 
         let totalScore = 0
@@ -81,11 +80,8 @@ async function checkAnswers(req, res) {
             }
         })
 
-        // Save the score
         const scoreRecord = await Question.saveScore({ userid: userId, testid: testId, score: totalScore })
-
         res.status(200).json({ message: "Quiz submitted!", totalScore, scoreRecord })
-
     } catch (err) {
         res.status(500).json({ error: err.message })
     }
