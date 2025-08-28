@@ -109,48 +109,48 @@ describe("Test", () => {
         })
     })
 
-    xdescribe('update', () => {
-        it('should return the updated subject on successful update', async () => {
+    describe('update', () => {
+        it('should return the updated test on successful update', async () => {
             // ARRANGE
-            const subject = new Subject({ subjectid: 1, subjectname: 'Hitsory'})
-            const updatedData = { subjectname: 'History' }
-            const updatedSubject = { subjectid: 1, ...updatedData }
-            jest.spyOn(db, 'query').mockResolvedValueOnce({ rows: [updatedSubject] })
+            const test = new Test({ testid: 1, testname: 'History Basics', subjectid: 1, duedate: "2025-08-30", assigneddate: "2025-08-26", authorid: 1 })
+            const updatedData = { testname: 'History Advanced' }
+            const updatedTest = { testid: 1, ...updatedData }
+            jest.spyOn(db, 'query').mockResolvedValueOnce({ rows: [updatedTest] })
             // ACT
-            const result = await subject.update(updatedData)
+            const result = await test.update(updatedData)
             // ASSERT
-            expect(result).toBeInstanceOf(Subject)
-            expect(result.subjectname).toBe('History')
-            expect(result.subjectid).toBe(1)
-            expect(db.query).toHaveBeenCalledWith("UPDATE subjects SET subjectname = $1 WHERE subjectid = $2 RETURNING subjectid, subjectname;", [updatedData.subjectname, subject.subjectid])
+            expect(result).toBeInstanceOf(Test)
+            expect(result.testname).toBe('History Advanced')
+            expect(result.testid).toBe(1)
+            expect(db.query).toHaveBeenCalledWith("UPDATE test SET testname = COALESCE($1, testname), subjectid = COALESCE($2, subjectid), duedate = COALESCE($3, duedate), assigneddate = COALESCE($4, assigneddate), authorid = COALESCE($5, authorid) WHERE testid = $6 RETURNING *;", [updatedData.testname, test.subjectid, test.duedate, test.assigneddate, test.authorid, test.testid])
         })
 
         it('should throw an Error on db query failure', async () => {
             // ARRANGE
-            const subject = new Subject({ subjectid: 1, subjectname: 'History' })
+            const test = new Test({ testid: 1, testname: 'History Basics' })
             jest.spyOn(db, 'query').mockRejectedValue(new Error('Database error'));
             // ACT & ASSERT
-            await expect(subject.update({ subjectname: 'Geography' })).rejects.toThrow('Database error');
+            await expect(test.update({ testname: 'History Advanced' })).rejects.toThrow('Database error');
         });
     })
 
-    xdescribe('destroy', () => {
+    describe('destroy', () => {
         it('should return nothing on successful deletion', async () => {
             // ARRANGE
-            const subject = new Subject({ subjectid: 1, subjectname: 'History' });
+            const test = new Test({ testid: 1, testname: 'History Basics', subjectid: 1, duedate: "2025-08-30", assigneddate: "2025-08-26", authorid: 1 });
             jest.spyOn(db, 'query').mockResolvedValueOnce({ rows: [] });
             // ACT
-            const result = await subject.destroy()
+            const result = await test.destroy()
             // ASSERT
-            expect(db.query).toHaveBeenCalledWith("DELETE FROM subjects WHERE subjectid = $1;", [subject.subjectid])
+            expect(db.query).toHaveBeenCalledWith("DELETE FROM test WHERE testid = $1;", [test.testid])
         })
 
         it('should throw an Error on db query failure', async () => {
             // ARRANGE
-            const subject = new Subject({ subjectid: 1, subjectname: 'History' })
+            const test = new Test({ testid: 1, testname: 'History Basics', subjectid: 1, duedate: "2025-08-30", assigneddate: "2025-08-26", authorid: 1 })
             jest.spyOn(db, 'query').mockRejectedValue(new Error('Database error'));
             // ACT & ASSERT
-            await expect(subject.destroy()).rejects.toThrow('Cannot delete')
+            await expect(test.destroy()).rejects.toThrow('Cannot delete')
         });
     })
 })

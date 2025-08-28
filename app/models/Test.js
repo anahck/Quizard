@@ -55,7 +55,16 @@ class Test {
 
     async update(data) {
         const { testname, subjectid, duedate, assigneddate, authorid } = data;
-        const response = await db.query("UPDATE test SET testname = COALESCE($1, testname), subjectid  = COALESCE($2, subjectid), duedate    = COALESCE($3, duedate), assigneddate = COALESCE($4, assigneddate), authorid   = COALESCE($5, authorid) WHERE testid = $6 RETURNING *;", [testname, subjectid, duedate, assigneddate, authorid, this.testid])
+        const response = await db.query("UPDATE test SET testname = COALESCE($1, testname), subjectid = COALESCE($2, subjectid), duedate = COALESCE($3, duedate), assigneddate = COALESCE($4, assigneddate), authorid = COALESCE($5, authorid) WHERE testid = $6 RETURNING *;", 
+            [
+                testname ?? this.testname,
+                subjectid ?? this.subjectid,
+                duedate ?? this.duedate,
+                assigneddate ?? this.assigneddate,
+                authorid ?? this.authorid, 
+                this.testid
+            ])
+
         if (response.rows.length !== 1) {
             throw new Error("Unable to update test");
         }
@@ -81,7 +90,11 @@ class Test {
     // }
 
     async destroy() {
+        try {
         const response = await db.query("DELETE FROM test WHERE testid = $1;", [this.testid])
+        } catch (err) {
+            throw Error("Cannot delete")
+        }
     }
 }
 
