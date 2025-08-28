@@ -3,6 +3,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     const quizListUl = document.getElementById("quiz-list-ul")
     const description = document.getElementById("quiz-description")
 
+    // --- NEW: Add references for profile + points ---
+    const profileEl = document.querySelector(".profile")
+    const pointsEl = document.querySelector(".points")
+
     try {
         const response = await fetch("http://localhost:3000/tests")
         const tests = await response.json()
@@ -12,11 +16,6 @@ document.addEventListener("DOMContentLoaded", async () => {
             "2": "This quiz covers Ancient Civilizations.",
             "3": "This quiz focuses on the Cold War.",
         }
-
-        // quizListUl.innerHTML = tests.map(test => `
-        //     <li>
-        //         <a href="quiz.html?id=${test.testid}" class="quiz-item" data-id="${test.testid}">${test.testname}</a>
-        //     </li>`).join("")
 
         quizListUl.innerHTML = tests.map(test => `
             <div class="quiz-card" data-id="${test.testid}">${test.testname}</div>`).join("");
@@ -44,10 +43,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     const menuLinks = document.querySelectorAll(".navbar a")
     const cardsContainer = document.getElementById("cards-container")
 
-        menuLinks.forEach(link => {
-            link.addEventListener("click", async (e) => {
-                e.preventDefault()
-                const action = link.getAttribute("data-section")
+    menuLinks.forEach(link => {
+        link.addEventListener("click", async (e) => {
+            e.preventDefault()
+            const action = link.getAttribute("data-section")
 
             try {
                 if (action === "scores") {
@@ -88,6 +87,42 @@ document.addEventListener("DOMContentLoaded", async () => {
             }
         })
     })
+
+    // --- NEW: Load user info and last attempt for profile + points ---
+    try {
+        const userId = localStorage.getItem("userid")
+        const token = localStorage.getItem("token")
+
+        if (!userId || !token) {
+            window.location.href = "index.html"
+            return
+        }
+
+        // fetch user details
+        const userRes = await fetch(`http://localhost:3000/users/${userId}`, {
+            headers: { "Authorization": `Bearer ${token}` }
+        })
+        const userData = await userRes.json()
+
+        // fetch scores
+        const scoresRes = await fetch(`http://localhost:3000/scores/users/${userId}`, {
+            headers: { "Authorization": `Bearer ${token}` }
+        })
+        const scores = await scoresRes.json()
+
+        // update profile + points headers
+        profileEl.textContent = `Profile: ${userData.email || "Unknown"}`
+        if (scores.length > 0) {
+            const lastAttempt = scores[scores.length - 1] // take last record
+            pointsEl.textContent = `Points: ${lastAttempt.score}`
+        } else {
+            pointsEl.textContent = "Points: 0"
+        }
+    } catch (err) {
+        console.error("Error loading profile/points:", err)
+        profileEl.textContent = "Profile: Error"
+        pointsEl.textContent = "Points: Error"
+    }
 })
 
 async function loadPosts () {
@@ -95,14 +130,13 @@ async function loadPosts () {
         headers: {
           Authorization: localStorage.getItem("token"),
         },
-      };
+    };
       
     const response = await fetch("http://localhost:3000/users", options);
 
     if (response.status != 200) {
         window.location.assign("./index.html");
     }
-
 }
 
 loadPosts();
