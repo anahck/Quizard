@@ -53,7 +53,7 @@ CREATE TABLE scores(
     scoreID INT GENERATED ALWAYS AS IDENTITY,
     userID INT NOT NULL,
     testID INT NOT NULL,
-    classID INT NOT NULL,
+    classID INT,
     score INT NOT NULL,
     scoreDate DATE NOT NULL,
     attempt INT NOT NULL DEFAULT 1,
