@@ -1,19 +1,37 @@
 document.addEventListener("DOMContentLoaded", async () => {
-    const quizSection = document.getElementById("quiz");
-    const scoresSection = document.getElementById("scores");
-    const pastSection = document.getElementById("past");
+    // const quizSection = document.getElementById("quiz");
+    // const scoresSection = document.getElementById("scores");
+    // const pastSection = document.getElementById("past");
     const quizListSection = document.querySelector(".quiz-list")
     const quizListUl = document.getElementById("quiz-list-ul")
+    const description = document.getElementById("quiz-description")
 
     try {
         const response = await fetch("http://localhost:3000/tests")
         const tests = await response.json()
 
+        const testDescriptions = {
+            "1": "This quiz tests your basic World War II knowledge.",
+            "2": "This quiz covers Ancient Civilizations.",
+            "3": "This quiz focuses on the Cold War.",
+        }
+
         quizListUl.innerHTML = tests.map(test => `
             <li>
-                <a href="quiz.html?id=${test.testid}">${test.testname}</a>
+                <a href="quiz.html?id=${test.testid}" class="quiz-item" data-id="${test.testid}">${test.testname}</a>
             </li>`).join("")
-        
+
+        document.querySelectorAll(".quiz-item").forEach(item => {
+            item.addEventListener("mouseenter", (e) => {
+                const testId = e.currentTarget.getAttribute("data-id")
+                description.textContent = testDescriptions[testId]
+            })
+
+            item.addEventListener("mouseleave", () => {
+                description.textContent = "Hover over a quiz to see its description."
+            })
+        })
+
     } catch (err) {
         quizListSection.innerHTML = `<p>Error loading quizzes: ${err.message}</p>`
     }
@@ -129,7 +147,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                     <ul>
                         ${scores.map(score => `
                         <li>
-                        <strong>${testMap[score.testid] || "Unknown Test"}</strong> <small>${new Date(score.scoredate).toLocaleDateString()}</small><br>
+                        <strong>${testMap[score.testid]}</strong> <small>${new Date(score.scoredate).toLocaleDateString()}</small><br>
                         Attempt ${score.attempt}: ${score.score} points <br>
                         </li>`).join("")}
                     </ul>
