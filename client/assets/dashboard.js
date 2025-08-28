@@ -3,7 +3,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     const quizListUl = document.getElementById("quiz-list-ul")
     const description = document.getElementById("quiz-description")
 
-    // --- NEW: Add references for profile + points ---
     const profileEl = document.getElementById("user-email")
     const pointsEl = document.getElementById("user-points")
 
@@ -88,7 +87,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         })
     })
 
-    // --- NEW: Load user info and last attempt for profile + points ---
     try {
         const userId = localStorage.getItem("userid")
         const token = localStorage.getItem("token")
@@ -98,22 +96,19 @@ document.addEventListener("DOMContentLoaded", async () => {
             return
         }
 
-        // fetch user details
         const userRes = await fetch(`http://localhost:3000/users/${userId}`, {
             headers: { "Authorization": `Bearer ${token}` }
         })
         const userData = await userRes.json()
 
-        // fetch scores
         const scoresRes = await fetch(`http://localhost:3000/scores/users/${userId}`, {
             headers: { "Authorization": `Bearer ${token}` }
         })
         const scores = await scoresRes.json()
 
-        // ✅ FIX: only insert values, not "Profile:" / "Points:" again
         profileEl.textContent = userData.email || "Unknown"
         if (scores.length > 0) {
-            const lastAttempt = scores[scores.length - 1] // take last record
+            const lastAttempt = scores[scores.length - 1]
             pointsEl.textContent = lastAttempt.score
         } else {
             pointsEl.textContent = "0"

@@ -34,18 +34,12 @@ class Test {
         }
 
         const existingTest = await db.query("SELECT testname FROM test WHERE testname = $1;", [testname])
-        const existingSubject = await db.query("SELECT subjectid FROM subjects WHERE subjectid = $1;", [subjectid])
-        const existingAuthor = await db.query("SELECT userid FROM userinfo WHERE userid = $1;", [authorid])
         
-        if (existingSubject.rows.length === 0) {
-            throw Error("A subject with this ID does not exist")
-        }
-        if (existingAuthor.rows.length === 0) {
-            throw Error("An author with this ID does not exist")
-        }
-        if (existingTest.rows.length === 0){
+        if(existingTest.rows.length === 0){
             const response = await db.query("INSERT INTO test (testname, subjectid, duedate, assigneddate, authorid) VALUES ($1, $2, $3, $4, $5) RETURNING *;",
                 [testname, subjectid, duedate, assigneddate, authorid])
+            
+            console.log(response.rows[0]);
             return new Test(response.rows[0])
         }
         else {
