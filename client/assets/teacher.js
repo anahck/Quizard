@@ -1,4 +1,22 @@
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
+    const profileEl = document.getElementById("user-email");
+    try {
+        const userId = localStorage.getItem("userid");
+        const token = localStorage.getItem("token");
+        const userrole = localStorage.getItem("role")
+        if (!userId || !token || (userrole != 'teacher' && userrole != 'developer')) {
+            window.location.href = "index.html";
+            return;
+        }
+        const userRes = await fetch(`http://localhost:3000/users/${userId}`, {
+            headers: { "Authorization": `Bearer ${token}` }
+        });
+        const userData = await userRes.json();
+        profileEl.textContent = userData.email || "Unknown";
+    } catch (err) {
+        if (profileEl) profileEl.textContent = "Error";
+    }
+
     const navbar = document.querySelector(".navbar ul");
     navbar.addEventListener("click", async (e) => {
         if (e.target && e.target.textContent.trim() === "View students quiz results") {
