@@ -28,6 +28,11 @@ class Test {
 
     static async create(data){
         const {testname, subjectid, duedate, assigneddate, authorid} = data
+
+        if (!testname) {
+            throw Error("Test name is missing")
+        }
+
         const existingTest = await db.query("SELECT testname FROM test WHERE testname = $1;", [testname])
         const existingSubject = await db.query("SELECT subjectid FROM subjects WHERE subjectid = $1;", [subjectid])
         const existingAuthor = await db.query("SELECT userid FROM userinfo WHERE userid = $1;", [authorid])
@@ -38,12 +43,12 @@ class Test {
         if (existingAuthor.rows.length === 0) {
             throw Error("An author with this ID does not exist")
         }
-        if(existingTest.rows.length === 0){
+        if (existingTest.rows.length === 0){
             const response = await db.query("INSERT INTO test (testname, subjectid, duedate, assigneddate, authorid) VALUES ($1, $2, $3, $4, $5) RETURNING *;",
                 [testname, subjectid, duedate, assigneddate, authorid])
             return new Test(response.rows[0])
         }
-        else{
+        else {
             throw Error("A test with this name already exists")
         }
     }

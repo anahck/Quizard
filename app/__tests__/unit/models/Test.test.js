@@ -10,9 +10,9 @@ describe("Test", () => {
         it('resolves with tests on successful db query', async () => {
             // ARRANGE
             const mockTest = [
-                { testid: 1, testname: 'History', subjectid: 1},
-                { testid: 2, testname: 'Geography', subjectid: 2},
-                { testid: 3, testname: 'Languages', subjectid: 3},
+                { testid: 1, testname: 'History Basics', subjectid: 1},
+                { testid: 2, testname: 'Geography Basics', subjectid: 2},
+                { testid: 3, testname: 'Languages Basics', subjectid: 3},
             ]
             jest.spyOn(db, 'query').mockResolvedValueOnce({ rows: mockTest })
             // ACT
@@ -20,7 +20,7 @@ describe("Test", () => {
             // ASSERT
             expect(tests).toHaveLength(3)
             expect(tests[0]).toHaveProperty('testid')
-            expect(tests[0].testname).toBe('History')
+            expect(tests[0].testname).toBe('History Basics')
             expect(db.query).toHaveBeenCalledWith("SELECT * FROM test;")
         })
 
@@ -32,55 +32,80 @@ describe("Test", () => {
         })
     })
 
-    xdescribe('getOneByID', () => {
-        it('resolves with subject on successful db query', async () => {
+    describe('getOneByID', () => {
+        it('resolves with test on successful db query', async () => {
             // ARRANGE
-            const testSubject = [{ subjectid: 1, subjectname: 'History' }]
-            jest.spyOn(db, 'query').mockResolvedValueOnce({ rows: testSubject })
+            const testTest = [{ testid: 1, testname: 'History Basics', subjectid: 1 }]
+            jest.spyOn(db, 'query').mockResolvedValueOnce({ rows: testTest })
             // ACT
-            const result = await Subject.getOneByID(1)
+            const result = await Test.getOneByID(1)
             // ASSERT
-            expect(result).toBeInstanceOf(Subject)
-            expect(result.subjectname).toBe('History')
-            expect(result.subjectid).toBe(1)
-            expect(db.query).toHaveBeenCalledWith("SELECT * FROM subjects WHERE subjectid = $1;", [1])
+            expect(result).toBeInstanceOf(Test)
+            expect(result.testname).toBe('History Basics')
+            expect(result.testid).toBe(1)
+            expect(db.query).toHaveBeenCalledWith("SELECT * FROM test WHERE testid = $1;", [1])
         })
 
-        it('should throw an Error when no subject is found', async () => {
+        it('should throw an Error when no test is found', async () => {
             // ARRANGE
             jest.spyOn(db, 'query').mockResolvedValueOnce({ rows: [] })
             // ACT & ASSERT
-            await expect(Subject.getOneByID(999)).rejects.toThrow("Unable to locate subject")
+            await expect(Test.getOneByID(999)).rejects.toThrow("Unable to locate test")
         })
     })
 
-    xdescribe('create', () => {
-        it('resolves with subject on successful creation', async () => {
+    describe('create', () => {
+        it('resolves with test on successful creation', async () => {
             // ARRANGE
-            const subjectData = { subjectname: 'History' }
-            jest.spyOn(db, 'query').mockResolvedValueOnce({ rows: [] }).mockResolvedValueOnce({ rows: [{ ...subjectData, subjectid: 1 }] })
+            const testData = { testname: 'History Basics', subjectid: 1, duedate: "2025-08-30", assigneddate: "2025-08-26", authorid: 1 }
+            jest.spyOn(db, 'query').mockResolvedValueOnce({ rows: [] })
+                .mockResolvedValueOnce({ rows: [{ subjectid: 1 }] })
+                .mockResolvedValueOnce({ rows: [{ userid: 1 }] })
+                .mockResolvedValueOnce({ rows: [{ ...testData, testid: 1 }] })
             // ACT
-            const result = await Subject.create(subjectData)
+            const result = await Test.create(testData)
             // ASSERT
-            expect(result).toBeInstanceOf(Subject)
-            expect(result).toHaveProperty("subjectid", 1)
-            expect(result).toHaveProperty("subjectname", "History")
-            expect(db.query).toHaveBeenCalledWith("INSERT INTO subjects (subjectname) VALUES ($1) RETURNING *;", [subjectData.subjectname])
+            expect(result).toBeInstanceOf(Test)
+            expect(result).toHaveProperty("testid", 1)
+            expect(result).toHaveProperty("testname", "History Basics")
+            expect(db.query).toHaveBeenCalledWith("INSERT INTO test (testname, subjectid, duedate, assigneddate, authorid) VALUES ($1, $2, $3, $4, $5) RETURNING *;", [testData.testname, testData.subjectid, testData.duedate, testData.assigneddate, testData.authorid ])
         })
 
-        it('should throw an Error when subject name is missing', async () => {
+        it('should throw an Error when test name is missing', async () => {
             // ARRANGE
-            const incompleteSubjectData = {}
+            const incompleteTestData = {}
             // ACT & ASSERT
-            await expect(Subject.create(incompleteSubjectData)).rejects.toThrow("Subject name is missing")
+            await expect(Test.create(incompleteTestData)).rejects.toThrow("Test name is missing")
         })
         
-        it('should throw an Error when subject already exists', async () => {
+        it('should throw an Error when test already exists', async () => {
             // ARRANGE
-            const subjectData = { subjectname: 'History' }
-            jest.spyOn(db, 'query').mockResolvedValueOnce({ rows: [{ ...subjectData, subjectid: 1 }] })
+            const testData = { testname: 'History Basics', subjectid: 1, duedate: "2025-08-30", assigneddate: "2025-08-26", authorid: 1 }
+            jest.spyOn(db, 'query').mockResolvedValueOnce({ rows: [{ ...testData, testid: 1 }] })
+                .mockResolvedValueOnce({ rows: [{ subjectid: 1 }] })
+                .mockResolvedValueOnce({ rows: [{ userid: 1 }] })
             // ACT & ASSERT
-            await expect(Subject.create(subjectData)).rejects.toThrow("A subject with this name already exists")
+            await expect(Test.create(testData)).rejects.toThrow("A test with this name already exists")
+        })
+
+        it('should throw an Error when subject id is incorrect', async () => {
+            // ARRANGE
+            const incorrectTestData = { testname: 'History Basics', subjectid: 100, duedate: "2025-08-30", assigneddate: "2025-08-26", authorid: 1 }
+            jest.spyOn(db, 'query').mockResolvedValueOnce({ rows: [] })
+                .mockResolvedValueOnce({ rows: [] })
+                .mockResolvedValueOnce({ rows: [{ userid: 1 }] })
+            // ACT & ASSERT
+            await expect(Test.create(incorrectTestData)).rejects.toThrow("A subject with this ID does not exist")
+        })
+
+        it('should throw an Error when author/user id is incorrect', async () => {
+            // ARRANGE
+            const incorrectTestData = { testname: 'History Basics', subjectid: 1, duedate: "2025-08-30", assigneddate: "2025-08-26", authorid: 100 }
+            jest.spyOn(db, 'query').mockResolvedValueOnce({ rows: [] })
+                .mockResolvedValueOnce({ rows: [{ subjectid: 1 }] })
+                .mockResolvedValueOnce({ rows: [] })
+            // ACT & ASSERT
+            await expect(Test.create(incorrectTestData)).rejects.toThrow("An author with this ID does not exist")
         })
     })
 
