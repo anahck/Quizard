@@ -1,7 +1,4 @@
 document.addEventListener("DOMContentLoaded", async () => {
-    // const quizSection = document.getElementById("quiz");
-    // const scoresSection = document.getElementById("scores");
-    // const pastSection = document.getElementById("past");
     const quizListSection = document.querySelector(".quiz-list")
     const quizListUl = document.getElementById("quiz-list-ul")
     const description = document.getElementById("quiz-description")
@@ -44,56 +41,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         quizListSection.innerHTML = `<p>Error loading quizzes: ${err.message}</p>`
     }
 
-    // quizSection.classList.remove("hidden");
-
-    // const menuLinks = document.querySelectorAll("#dashboard-menu a");
-    // const menuLinks = document.querySelectorAll(".navbar a");
-    // const sections = document.querySelectorAll(".content");
-
-    // menuLinks.forEach(link => {
-    //     link.addEventListener("click", async (e) => {
-    //         e.preventDefault();
-    //         sections.forEach(sec => sec.classList.add("hidden"));
-    //         const target = link.getAttribute("data-section");
-    //         const section = document.getElementById(target);
-    //         section.classList.remove("hidden");
-    //         try {
-    //             if (target === "quiz") {
-    //                 const response = await fetch("http://localhost:3000/tests");
-    //                 const quizzes = await response.json();
-    //                 section.innerHTML = `<h3>Available quizzes</h3>
-    //                     <ul> ${tests.map(test => `<li><a href="#" class="quiz-item" data-id="${test.testid}">
-    //                         ${test.testname}
-    //                         </a>
-    //                         </li>`).join("")}</ul>`
-    //             }
-    //             if (target === 'scores') {
-    //                 const userId = localStorage.getItem("userid")
-    //                 const [testsResponse, scoresResponse] = await Promise.all([
-    //                     fetch("http://localhost:3000/tests"),
-    //                     fetch(`http://localhost:3000/scores/users/${userId}`)
-    //                 ])
-    //                 const tests = await testsResponse.json()
-    //                 const scores = await scoresResponse.json()
-    //                 const testMap = {};
-    //                 tests.forEach(t => {
-    //                     testMap[t.testid] = t.testname;
-    //                 });
-    //                 section.innerHTML = `
-    //                     <h3>Your Scores</h3>
-    //                     <ul>
-    //                     ${scores.map(s => `
-    //                         <li>${testMap[s.testid] || "Unknown Test"}: ${s.score}</li>
-    //                     `).join("")}
-    //                     </ul>
-    //                 `;
-    //             }
-    //         } catch (err) {
-    //             section.innerHTML = `<p>Error loading data: ${err.message}</p>`;
-    //         }
-    //     });
-    // });
-
     const menuLinks = document.querySelectorAll(".navbar a")
     const cardsContainer = document.getElementById("cards-container")
 
@@ -127,11 +74,10 @@ document.addEventListener("DOMContentLoaded", async () => {
                         <h3>Your Scores</h3>
                         <ul>
                             ${scores.map(score => `
-                            <li>
-                                <strong>${testMap[score.testid]}</strong> 
-                                <small>${new Date(score.scoredate).toLocaleDateString()}</small><br>
-                                Attempt ${score.attempt}: ${score.score} points <br>
-                            </li>`).join("")}
+                                <li>
+                                    <strong>${testMap[score.testid]}</strong> <small>${new Date(score.scoredate).toLocaleDateString()}</small><br>
+                                    Attempt ${score.attempt}: ${score.score} points <br>
+                                </li>`).join("")}
                         </ul>
                     `
                     cardsContainer.appendChild(card)
