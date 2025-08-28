@@ -24,6 +24,11 @@ class Subject {
 
     static async create(data){
         const {subjectname} = data
+
+        if (!subjectname) {
+            throw Error("Subject name is missing")
+        }
+
         const existingSubject = await db.query("SELECT subjectname FROM subjects WHERE subjectname = $1;", [subjectname])
         if(existingSubject.rows.length === 0){
             const response = await db.query("INSERT INTO subjects (subjectname) VALUES ($1) RETURNING *;", [subjectname])
@@ -43,7 +48,11 @@ class Subject {
     }
 
     async destroy() {
+        try {
         const response = await db.query("DELETE FROM subjects WHERE subjectid = $1;", [this.subjectid])
+        } catch (err) {
+            throw Error("Cannot delete")
+        }
     }
 }
 
