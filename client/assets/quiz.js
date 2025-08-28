@@ -17,17 +17,17 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   try {
-    const testResponse = await fetch(`http://localhost:3000/tests/${quizId}`);
+    const testResponse = await fetch(`https://quizard-api.onrender.com/tests/${quizId}`);
     const testData = await testResponse.json();
 
     const subjectId = testData.subjectid
 
-    const subjectResponse = await fetch(`http://localhost:3000/subjects/${subjectId}`);
+    const subjectResponse = await fetch(`https://quizard-api.onrender.com/subjects/${subjectId}`);
     const subjectData = await subjectResponse.json();
 
     quizNameElement.textContent = `${subjectData.subjectname} - ${testData.testname}`;
 
-    const questionsResponse = await fetch(`http://localhost:3000/questions/tests/${quizId}`);
+    const questionsResponse = await fetch(`https://quizard-api.onrender.com/questions/tests/${quizId}`);
     questions = await questionsResponse.json();
 
     if (questions.length === 0) {
@@ -76,7 +76,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     saveAnswer(); // save the last question
 
     try {
-        const response = await fetch("http://localhost:3000/questions/checkanswers", {
+        const response = await fetch("https://quizard-api.onrender.com/questions/checkanswers", {
             method: "POST",
             headers: { 
                 "Content-Type": "application/json",

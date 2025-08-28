@@ -14,7 +14,7 @@ document.getElementById("login-form").addEventListener("submit", async (e) => {
             passwordhash: form.get("password")
         })
     }
-    const response = await fetch("http://localhost:3000/auth/login", options)
+    const response = await fetch("https://quizard-api.onrender.com/auth/login", options)
     const data = await response.json();
 
     if (response.status == 200) {
@@ -51,7 +51,7 @@ document.getElementById("otp-submit").addEventListener("click", async () => {
         },
         body: JSON.stringify({ email, otp })
     };
-    const response = await fetch("http://localhost:3000/auth/verify-otp", options);
+    const response = await fetch("https://quizard-api.onrender.com/auth/verify-otp", options);
     const data = await response.json();
     if (response.status == 200) {
         localStorage.setItem("token", data.token);

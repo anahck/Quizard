@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const pointsEl = document.getElementById("user-points")
 
     try {
-        const response = await fetch("http://localhost:3000/tests")
+        const response = await fetch("https://quizard-api.onrender.com/tests")
         const tests = await response.json()
 
         const testDescriptions = {
@@ -56,8 +56,8 @@ document.addEventListener("DOMContentLoaded", async () => {
                     const userId = localStorage.getItem("userid")
 
                     const [testsResponse, scoresResponse] = await Promise.all([
-                        fetch("http://localhost:3000/tests"),
-                        fetch(`http://localhost:3000/scores/users/${userId}`)
+                        fetch("https://quizard-api.onrender.com/tests"),
+                        fetch(`https://quizard-api.onrender.com/scores/users/${userId}`)
                     ])
 
                     const tests = await testsResponse.json()
@@ -96,12 +96,12 @@ document.addEventListener("DOMContentLoaded", async () => {
             return
         }
 
-        const userRes = await fetch(`http://localhost:3000/users/${userId}`, {
+        const userRes = await fetch(`https://quizard-api.onrender.com/users/${userId}`, {
             headers: { "Authorization": `Bearer ${token}` }
         })
         const userData = await userRes.json()
 
-        const scoresRes = await fetch(`http://localhost:3000/scores/users/${userId}`, {
+        const scoresRes = await fetch(`https://quizard-api.onrender.com/scores/users/${userId}`, {
             headers: { "Authorization": `Bearer ${token}` }
         })
         const scores = await scoresRes.json()
@@ -127,7 +127,7 @@ async function loadPosts () {
         },
     };
       
-    const response = await fetch("http://localhost:3000/users", options);
+    const response = await fetch("https://quizard-api.onrender.com/users", options);
 
     if (response.status != 200) {
         window.location.assign("./index.html");

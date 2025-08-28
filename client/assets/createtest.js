@@ -8,11 +8,11 @@ async function loadProfile() {
             window.location.href = "index.html";
             return;
         }
-        const userRes = await fetch(`http://localhost:3000/users/${userId}`, {
+        const userRes = await fetch(`https://quizard-api.onrender.com/users/${userId}`, {
             headers: { "Authorization": `Bearer ${token}` }
         });
         const userData = await userRes.json();
-        const scoresRes = await fetch(`http://localhost:3000/scores/users/${userId}`, {
+        const scoresRes = await fetch(`https://quizard-api.onrender.com/scores/users/${userId}`, {
             headers: { "Authorization": `Bearer ${token}` }
         });
         const scores = await scoresRes.json();
@@ -47,7 +47,7 @@ document.addEventListener("DOMContentLoaded", () => {
             },
             body: JSON.stringify(data)
         };
-        const result = await fetch("http://localhost:3000/tests", options);
+        const result = await fetch("https://quizard-api.onrender.com/tests", options);
         if (result.status == 201) {
             window.location.reload();
         }

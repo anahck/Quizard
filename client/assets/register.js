@@ -19,7 +19,7 @@ document.getElementById("signup-form").addEventListener("submit", async (e) => {
         })
     }
 
-    const response = await fetch("http://localhost:3000/auth/register", options)
+    const response = await fetch("https://quizard-api.onrender.com/auth/register", options)
     const data = await response.json();
 
     if (response.status == 201) {

@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             window.location.href = "index.html";
             return;
         }
-        const userRes = await fetch(`http://localhost:3000/users/${userId}`, {
+        const userRes = await fetch(`https://quizard-api.onrender.com/users/${userId}`, {
             headers: { "Authorization": `Bearer ${token}` }
         });
         const userData = await userRes.json();
@@ -30,7 +30,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             }
             try {
                 const userid = localStorage.getItem("userid")
-                const response = await fetch(`http://localhost:3000/teacher/${userid}`);
+                const response = await fetch(`https://quizard-api.onrender.com/teacher/${userid}`);
                 const scores = await response.json();
                 if (scores.length === 0) {
                     resultsSection.innerHTML = `<h3>Students Quiz Results</h3><p>No results found.</p>`;
