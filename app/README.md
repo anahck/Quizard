@@ -412,4 +412,4 @@ Will return an array of objects in the form:
 #### Check answers against database
 
 - Functionality in order to check answers inputed by the user match the answers in the database and updates their scores with an attempt counter according to the test id and user id:
-  - POST a new score: https://quizard-api.onrender.com/questions/checkAnswers
+  - POST a new score: https://quizard-api.onrender.com/questions/checkanswers
