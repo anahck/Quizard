@@ -22,14 +22,20 @@ document.getElementById("login-form").addEventListener("submit", async (e) => {
             console.log(data);
             localStorage.setItem("token", data.token);
             localStorage.setItem("userid", data.userid)
-            window.location.assign("dashboard.html");
+            localStorage.setItem("role", data.userrole);
+            if(data.userrole == 'teacher'){
+                window.location.assign("teacher.html");
+            }
+            else{
+                window.location.assign("dashboard.html");
+            }
         } else {
             document.getElementById("otp-container").style.display = "block";
             document.getElementById("email").disabled = true;
             document.getElementById("password").disabled = true;
             document.querySelector("button[type='submit']").disabled = true;
         }
-    } else {
+    } else {    
         alert(data.error);
     }
 })
@@ -50,7 +56,13 @@ document.getElementById("otp-submit").addEventListener("click", async () => {
     if (response.status == 200) {
         localStorage.setItem("token", data.token);
         localStorage.setItem("userid", data.userid);
-        window.location.assign("dashboard.html");
+        localStorage.setItem("role", data.userrole);
+        if(data.userrole == 'teacher'){
+            window.location.assign("teacher.html");
+        }
+        else{
+            window.location.assign("dashboard.html");
+        }
     } else {
         alert(data.error);
     }
