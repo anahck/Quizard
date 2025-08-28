@@ -137,6 +137,22 @@ document.addEventListener("DOMContentLoaded", async () => {
     prevBtn.disabled = index === 0;
     nextBtn.disabled = index === questions.length - 1;
     submitBtn.style.display = index === questions.length - 1 ? "inline-block" : "none";
+  
+    // handle Enter key on input
+    const input = document.getElementById("answer-input");
+    input.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        saveAnswer();
+
+        if (currentQuestionIndex < questions.length - 1) {
+          currentQuestionIndex++;
+          showQuestion(currentQuestionIndex);
+        } else {
+          submitBtn.click();
+        }
+      }
+    });
   }
 
   function saveAnswer() {
