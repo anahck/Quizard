@@ -1,60 +1,89 @@
 // const Test = require("supertest/lib/test")
 const db = require("../../../db/connect")
-const Test = require("../../../models/Test")
+const Question = require("../../../models/Question")
 
-xdescribe("Test", () => {
+describe("Question", () => {
     beforeEach(() => jest.clearAllMocks())
     afterAll(() => jest.resetAllMocks())
     
     describe('getAll', () => {
-        it('resolves with tests on successful db query', async () => {
+        it('resolves with questions on successful db query', async () => {
             // ARRANGE
-            const mockTest = [
-                { testid: 1, testname: 'History Basics', subjectid: 1},
-                { testid: 2, testname: 'Geography Basics', subjectid: 2},
-                { testid: 3, testname: 'Languages Basics', subjectid: 3},
+            const mockQuestion = [
+                { questionid: 1, questioncontent: 'A question1?', testid: 1, totalScore: 10, answer: "answer1" },
+                { questionid: 2, questioncontent: 'A question2?', testid: 1, totalScore: 10, answer: "answer2" },
+                { questionid: 3, questioncontent: 'A question3?', testid: 1, totalScore: 10, answer: "answer3" },
             ]
-            jest.spyOn(db, 'query').mockResolvedValueOnce({ rows: mockTest })
+            jest.spyOn(db, 'query').mockResolvedValueOnce({ rows: mockQuestion })
             // ACT
-            const tests = await Test.getAll()
+            const questions = await Question.getAll()
             // ASSERT
-            expect(tests).toHaveLength(3)
-            expect(tests[0]).toHaveProperty('testid')
-            expect(tests[0].testname).toBe('History Basics')
-            expect(db.query).toHaveBeenCalledWith("SELECT * FROM test;")
+            expect(questions).toHaveLength(3)
+            expect(questions[0]).toHaveProperty('questionid')
+            expect(questions[0].questioncontent).toBe('A question1?')
+            expect(db.query).toHaveBeenCalledWith("SELECT * FROM questions;")
         })
 
-        it('should throw an Error when no tests are found', async () => {
+        it('should throw an Error when no questions are found', async () => {
             // ARRANGE
             jest.spyOn(db, 'query').mockResolvedValueOnce({ rows: [] })
             // ACT & ASSERT
-            await expect(Test.getAll()).rejects.toThrow("No tests available")
+            await expect(Question.getAll()).rejects.toThrow("No questions available")
         })
     })
 
     describe('getOneByID', () => {
-        it('resolves with test on successful db query', async () => {
+        it('resolves with question on successful db query', async () => {
             // ARRANGE
-            const testTest = [{ testid: 1, testname: 'History Basics', subjectid: 1 }]
-            jest.spyOn(db, 'query').mockResolvedValueOnce({ rows: testTest })
+            const testQuestion = [{ questionid: 1, questioncontent: 'A question1?', testid: 1, totalScore: 10, answer: "answer1" }]
+            jest.spyOn(db, 'query').mockResolvedValueOnce({ rows: testQuestion })
             // ACT
-            const result = await Test.getOneByID(1)
+            const result = await Question.getOneByID(1)
             // ASSERT
-            expect(result).toBeInstanceOf(Test)
-            expect(result.testname).toBe('History Basics')
-            expect(result.testid).toBe(1)
-            expect(db.query).toHaveBeenCalledWith("SELECT * FROM test WHERE testid = $1;", [1])
+            expect(result).toBeInstanceOf(Question)
+            expect(result.questioncontent).toBe('A question1?')
+            expect(result.questionid).toBe(1)
+            expect(db.query).toHaveBeenCalledWith("SELECT * FROM questions WHERE questionid = $1;", [1])
         })
 
-        it('should throw an Error when no test is found', async () => {
+        it('should throw an Error when no question is found', async () => {
             // ARRANGE
             jest.spyOn(db, 'query').mockResolvedValueOnce({ rows: [] })
             // ACT & ASSERT
-            await expect(Test.getOneByID(999)).rejects.toThrow("Unable to locate test")
+            await expect(Question.getOneByID(999)).rejects.toThrow("Unable to locate question")
         })
     })
 
-    describe('create', () => {
+    describe('getByTestID', () => {
+        it('resolves with questions on successful db query', async () => {
+            // ARRANGE
+            const testid = 1
+            const mockQuestion = [
+                { questionid: 1, questioncontent: 'A question1?', testid: 1, totalScore: 10, answer: "answer1" },
+                { questionid: 2, questioncontent: 'A question2?', testid: 1, totalScore: 10, answer: "answer2" },
+                { questionid: 3, questioncontent: 'A question3?', testid: 1, totalScore: 10, answer: "answer3" },
+            ]
+            jest.spyOn(db, 'query').mockResolvedValueOnce({ rows: mockQuestion })
+            // ACT
+            const questions = await Question.getByTestID(testid)
+            // ASSERT
+            expect(questions).toHaveLength(3)
+            expect(questions[0]).toHaveProperty('questionid', 1)
+            expect(questions[0].questioncontent).toBe('A question1?')
+            expect(questions[0].testid).toBe(1)
+            expect(db.query).toHaveBeenCalledWith("SELECT * FROM questions WHERE testid = $1;", [testid])
+        })
+
+        it('should throw an Error when no questions are found', async () => {
+            // ARRANGE
+            const testid = 1
+            jest.spyOn(db, 'query').mockResolvedValueOnce({ rows: [] })
+            // ACT & ASSERT
+            await expect(Question.getByTestID(testid)).rejects.toThrow("No questions available for this test")
+        })
+    })
+
+    xdescribe('create', () => {
         it('resolves with test on successful creation', async () => {
             // ARRANGE
             const testData = { testname: 'History Basics', subjectid: 1, duedate: "2025-08-30", assigneddate: "2025-08-26", authorid: 1 }
@@ -109,7 +138,7 @@ xdescribe("Test", () => {
         })
     })
 
-    describe('update', () => {
+    xdescribe('update', () => {
         it('should return the updated test on successful update', async () => {
             // ARRANGE
             const test = new Test({ testid: 1, testname: 'History Basics', subjectid: 1, duedate: "2025-08-30", assigneddate: "2025-08-26", authorid: 1 })
@@ -134,7 +163,7 @@ xdescribe("Test", () => {
         });
     })
 
-    describe('destroy', () => {
+    xdescribe('destroy', () => {
         it('should return nothing on successful deletion', async () => {
             // ARRANGE
             const test = new Test({ testid: 1, testname: 'History Basics', subjectid: 1, duedate: "2025-08-30", assigneddate: "2025-08-26", authorid: 1 });
