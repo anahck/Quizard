@@ -88,19 +88,31 @@ class Question {
         }))
     }
 
-    static async saveScore({ userid, testid, score }) {
-        // Check if a score already exists
-        const existingScore = await db.query("SELECT * FROM scores WHERE userid = $1 AND testid = $2", [userid, testid])
+    // static async saveScore({ userid, testid, score }) {
+    //     // Check if a score already exists
+    //     const existingScore = await db.query("SELECT * FROM scores WHERE userid = $1 AND testid = $2", [userid, testid])
 
-        if (existingScore.rows.length === 0) {
-            // Insert new score
-            const response = await db.query("INSERT INTO scores (userid, testid, score, scoredate) VALUES ($1, $2, $3, $4) RETURNING *;", [userid, testid, score, new Date()])
-            return response.rows[0]
-        } else {
-            // Update existing score
-            const response = await db.query("UPDATE scores SET score = $1, scoredate = $2 WHERE userid = $3 AND testid = $4 RETURNING *;", [score, new Date(), userid, testid])
-            return response.rows[0]
+    //     if (existingScore.rows.length === 0) {
+    //         // Insert new score
+    //         const response = await db.query("INSERT INTO scores (userid, testid, score, scoredate) VALUES ($1, $2, $3, $4) RETURNING *;", [userid, testid, score, new Date()])
+    //         return response.rows[0]
+    //     } else {
+    //         // Update existing score
+    //         const response = await db.query("UPDATE scores SET score = $1, scoredate = $2 WHERE userid = $3 AND testid = $4 RETURNING *;", [score, new Date(), userid, testid])
+    //         return response.rows[0]
+    //     }
+    // }
+
+    static async saveScore({ userid, testid, score }) {
+        const latestResponse = await db.query("SELECT MAX(attempt) AS lastAttempt FROM scores WHERE userid = $1 AND testid = $2;", [userid, testid])
+
+        let nextAttempt = 1 
+        if (latestResponse.rows[0].lastattempt !== null) {
+            nextAttempt = latestResponse.rows[0].lastattempt + 1
         }
+
+        const response = await db.query("INSERT INTO scores (userid, testid, score, scoredate, attempt) VALUES ($1, $2, $3, $4, $5) RETURNING *;", [userid, testid, score, new Date(), nextAttempt])
+        return response.rows[0]
     }
 
 }

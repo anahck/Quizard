@@ -5,6 +5,27 @@
   box-sizing: border-box;
 }
 
+.hidden {
+  display: none;
+}
+
+.card {
+  background: #fff;
+  margin: 1rem 0;
+  max-width: 500px;
+  padding-left: 20px;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px black;
+}
+
+.card h3 {
+  margin-top: 0;
+}
+
+.card ul {
+  margin-left: 10px;
+}
 
 body {
   font-family: sans-serif;
