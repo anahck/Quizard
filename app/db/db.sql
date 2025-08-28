@@ -3,6 +3,8 @@ DROP TABLE IF EXISTS subjects CASCADE;
 DROP TABLE IF EXISTS test CASCADE;
 DROP TABLE IF EXISTS scores CASCADE;
 DROP TABLE IF EXISTS userInfo CASCADE;
+DROP TABLE IF EXISTS class_members CASCADE;
+DROP TABLE IF EXISTS classes CASCADE;
 
 CREATE TABLE userInfo (
     userID INT GENERATED ALWAYS AS IDENTITY,
@@ -13,6 +15,20 @@ CREATE TABLE userInfo (
     userRole VARCHAR(30) NOT NULL,
     yearGroup INT NOT NULL,
     PRIMARY KEY (userID)
+);
+
+CREATE TABLE classes (
+    classID INT GENERATED ALWAYS AS IDENTITY,
+    className VARCHAR(30) NOT NULL,
+    PRIMARY KEY (classID)
+);
+
+CREATE TABLE class_members (
+    classID INT NOT NULL,
+    userID INT NOT NULL,
+    PRIMARY KEY (classID, userID),
+    FOREIGN KEY (classID) REFERENCES classes(classID) ON DELETE CASCADE,
+    FOREIGN KEY (userID) REFERENCES userInfo(userID) ON DELETE CASCADE
 );
 
 CREATE TABLE subjects(
@@ -37,12 +53,14 @@ CREATE TABLE scores(
     scoreID INT GENERATED ALWAYS AS IDENTITY,
     userID INT NOT NULL,
     testID INT NOT NULL,
+    classID INT NOT NULL,
     score INT NOT NULL,
     scoreDate DATE NOT NULL,
     attempt INT NOT NULL DEFAULT 1,
     PRIMARY KEY (scoreID),
     FOREIGN KEY (userID) REFERENCES userInfo(userID) ON DELETE CASCADE,
-    FOREIGN KEY (testID) REFERENCES test(testID) ON DELETE CASCADE
+    FOREIGN KEY (testID) REFERENCES test(testID) ON DELETE CASCADE,
+    FOREIGN KEY (classID) REFERENCES classes(classID) ON DELETE CASCADE
 );
 
 CREATE TABLE questions(
@@ -58,7 +76,7 @@ INSERT INTO userInfo (firstName, lastName, email, passwordHash, userRole, yearGr
 VALUES
 ('Alice', 'Johnson', 'alice@example.com', 'hashedpassword123', 'student', 10),
 ('Bob', 'Smith', 'bob@example.com', 'hashedpassword456', 'student', 11),
-('Charlie', 'Brown', 'charlie@example.com', 'hashedpassword789', 'teacher', 0),
+('Charlie', 'Brown', 'beyevi1781@litepax.com', '$2b$10$IPgtDZlNLglJPoKy4FJIlunK6eDTD3GJ8b0Ircf.PgEJLNEEC/wo6', 'teacher', 0),
 ('Diana', 'Prince', 'diana@example.com', 'hashedpassword321', 'teacher', 0),
 ('dev', 'dev', 'quizardsapp@gmail.com', '$2b$10$IPgtDZlNLglJPoKy4FJIlunK6eDTD3GJ8b0Ircf.PgEJLNEEC/wo6', 'developer', 0);
 
@@ -89,11 +107,20 @@ VALUES
 ('What year did the Berlin Wall fall?', 3, 10, '1989'),
 ('Who was the Soviet leader during the Cuban Missile Crisis?', 3, 10, 'Nikita Khrushchev');
 
-INSERT INTO scores (userID, testID, score, scoreDate, attempt)
+INSERT INTO classes (className) VALUES ('Class One'), ('Class Two');
+
+-- Class 1: Alice, Bob, Charlie
+INSERT INTO class_members (classID, userID) VALUES (1, 1), (1, 2), (1, 3);
+-- Class 2: Alice, Bob, Diana
+INSERT INTO class_members (classID, userID) VALUES (2, 1), (2, 2), (2, 4);
+
+INSERT INTO scores (userID, testID, score, scoreDate, attempt, classID)
 VALUES
-(1, 1, 18.00, '2025-08-20', 1),  -- Alice: WWII Basics
-(2, 1, 15.00, '2025-08-20', 1),  -- Bob: WWII Basics
-(1, 2, 25.00, '2025-08-22', 1),  -- Alice: Ancient Civilizations
-(2, 3, 20.00, '2025-08-23', 1);  -- Bob: Cold War
+(1, 1, 18.00, '2025-08-20', 1, 1),  -- Alice: WWII Basics
+(2, 1, 15.00, '2025-08-20', 1, 1),  -- Bob: WWII Basics
+(1, 2, 25.00, '2025-08-22', 1, 2),  -- Alice: Ancient Civilizations
+(2, 2, 25.00, '2025-08-22', 1, 2),  -- Bob: Ancient Civilizations
+(1, 3, 20.00, '2025-08-23', 1, 1),  -- Bob: Cold War
+(2, 3, 20.00, '2025-08-23', 1, 1);  -- Bob: Cold War
 
 

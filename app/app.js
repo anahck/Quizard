@@ -7,6 +7,7 @@ const subjectRouter = require('./routes/subjects')
 const scoreRouter = require('./routes/scores')
 const questionRouter = require('./routes/questions')
 const authRouter = require('./routes/auth')
+const teacherRouter = require('./routes/teacher')
 const logger = require('./middleware/logger')
 
 const app = express()
@@ -20,6 +21,7 @@ app.use('/subjects', subjectRouter)
 app.use('/scores', scoreRouter)
 app.use('/questions', questionRouter)
 app.use('/auth', authRouter)
+app.use('/teacher', teacherRouter)
 
 app.get("/", (req, res) => {
   res.status(200).json({

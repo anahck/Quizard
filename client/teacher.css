@@ -81,6 +81,14 @@ h2 {
   border-radius: 10px;
   box-shadow: 0 2px 8px black;
 }
+    .students-quiz-results {
+      background-color: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px black;
+      margin-top: 20px;
+      grid-column: 1 / span 2;
+    }
 
 .navbar ul {
   list-style: none;
