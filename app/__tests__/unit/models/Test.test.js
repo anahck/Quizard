@@ -1,37 +1,38 @@
+// const Test = require("supertest/lib/test")
 const db = require("../../../db/connect")
-const Subject = require("../../../models/Subject")
+const Test = require("../../../models/Test")
 
-xdescribe("Subject", () => {
+describe("Test", () => {
     beforeEach(() => jest.clearAllMocks())
     afterAll(() => jest.resetAllMocks())
     
     describe('getAll', () => {
-        it('resolves with subjects on successful db query', async () => {
+        it('resolves with tests on successful db query', async () => {
             // ARRANGE
-            const mockSubject = [
-                { subjectid: 1, subjectname: 'History' },
-                { subjectid: 2, subjectname: 'Geography' },
-                { subjectid: 3, subjectname: 'Languages' },
+            const mockTest = [
+                { testid: 1, testname: 'History', subjectid: 1},
+                { testid: 2, testname: 'Geography', subjectid: 2},
+                { testid: 3, testname: 'Languages', subjectid: 3},
             ]
-            jest.spyOn(db, 'query').mockResolvedValueOnce({ rows: mockSubject })
+            jest.spyOn(db, 'query').mockResolvedValueOnce({ rows: mockTest })
             // ACT
-            const subjects = await Subject.getAll()
+            const tests = await Test.getAll()
             // ASSERT
-            expect(subjects).toHaveLength(3)
-            expect(subjects[0]).toHaveProperty('subjectid')
-            expect(subjects[0].subjectname).toBe('History')
-            expect(db.query).toHaveBeenCalledWith("SELECT * FROM subjects;")
+            expect(tests).toHaveLength(3)
+            expect(tests[0]).toHaveProperty('testid')
+            expect(tests[0].testname).toBe('History')
+            expect(db.query).toHaveBeenCalledWith("SELECT * FROM test;")
         })
 
-        it('should throw an Error when no subjects are found', async () => {
+        it('should throw an Error when no tests are found', async () => {
             // ARRANGE
             jest.spyOn(db, 'query').mockResolvedValueOnce({ rows: [] })
             // ACT & ASSERT
-            await expect(Subject.getAll()).rejects.toThrow("No subjects available")
+            await expect(Test.getAll()).rejects.toThrow("No tests available")
         })
     })
 
-    describe('getOneByID', () => {
+    xdescribe('getOneByID', () => {
         it('resolves with subject on successful db query', async () => {
             // ARRANGE
             const testSubject = [{ subjectid: 1, subjectname: 'History' }]
@@ -53,7 +54,7 @@ xdescribe("Subject", () => {
         })
     })
 
-    describe('create', () => {
+    xdescribe('create', () => {
         it('resolves with subject on successful creation', async () => {
             // ARRANGE
             const subjectData = { subjectname: 'History' }
@@ -83,7 +84,7 @@ xdescribe("Subject", () => {
         })
     })
 
-    describe('update', () => {
+    xdescribe('update', () => {
         it('should return the updated subject on successful update', async () => {
             // ARRANGE
             const subject = new Subject({ subjectid: 1, subjectname: 'Hitsory'})
@@ -108,7 +109,7 @@ xdescribe("Subject", () => {
         });
     })
 
-    describe('destroy', () => {
+    xdescribe('destroy', () => {
         it('should return nothing on successful deletion', async () => {
             // ARRANGE
             const subject = new Subject({ subjectid: 1, subjectname: 'History' });
