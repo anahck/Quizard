@@ -83,59 +83,37 @@ describe("Question", () => {
         })
     })
 
-    xdescribe('create', () => {
-        it('resolves with test on successful creation', async () => {
+    describe('create', () => {
+        it('resolves with question on successful creation', async () => {
             // ARRANGE
-            const testData = { testname: 'History Basics', subjectid: 1, duedate: "2025-08-30", assigneddate: "2025-08-26", authorid: 1 }
-            jest.spyOn(db, 'query').mockResolvedValueOnce({ rows: [] })
-                .mockResolvedValueOnce({ rows: [{ subjectid: 1 }] })
-                .mockResolvedValueOnce({ rows: [{ userid: 1 }] })
-                .mockResolvedValueOnce({ rows: [{ ...testData, testid: 1 }] })
+            const questionData = { questioncontent: 'History?', testid: 1, totalscore: 10, answer: "answer" }
+            jest.spyOn(db, 'query').mockResolvedValueOnce({ rows: [{ testid: 1 }] })
+                .mockResolvedValueOnce({ rows: [{ ...questionData, questionid: 1 }] })
             // ACT
-            const result = await Test.create(testData)
+            const result = await Question.create(questionData)
             // ASSERT
-            expect(result).toBeInstanceOf(Test)
-            expect(result).toHaveProperty("testid", 1)
-            expect(result).toHaveProperty("testname", "History Basics")
-            expect(db.query).toHaveBeenCalledWith("INSERT INTO test (testname, subjectid, duedate, assigneddate, authorid) VALUES ($1, $2, $3, $4, $5) RETURNING *;", [testData.testname, testData.subjectid, testData.duedate, testData.assigneddate, testData.authorid ])
+            expect(result).toBeInstanceOf(Question)
+            expect(result).toHaveProperty("questionid", 1)
+            expect(result).toHaveProperty("questioncontent", "History?")
+            expect(db.query).toHaveBeenCalledWith("INSERT INTO questions (questioncontent, testid, totalscore, answer) VALUES ($1, $2, $3, $4) RETURNING *;", [questionData.questioncontent, questionData.testid, questionData.totalscore, questionData.answer ])
         })
 
-        it('should throw an Error when test name is missing', async () => {
+        it('should throw an Error when question content is missing', async () => {
             // ARRANGE
-            const incompleteTestData = {}
+            const incompleteQuestionData = {}
             // ACT & ASSERT
-            await expect(Test.create(incompleteTestData)).rejects.toThrow("Test name is missing")
+            await expect(Question.create(incompleteQuestionData)).rejects.toThrow("Question content is missing")
         })
         
-        it('should throw an Error when test already exists', async () => {
+
+        it('should throw an Error when test id is incorrect', async () => {
             // ARRANGE
-            const testData = { testname: 'History Basics', subjectid: 1, duedate: "2025-08-30", assigneddate: "2025-08-26", authorid: 1 }
-            jest.spyOn(db, 'query').mockResolvedValueOnce({ rows: [{ ...testData, testid: 1 }] })
-                .mockResolvedValueOnce({ rows: [{ subjectid: 1 }] })
-                .mockResolvedValueOnce({ rows: [{ userid: 1 }] })
+            const incorrectQuestionData = { questioncontent: 'History?', testid: 100, totalscore: 10, answer: "answer" }
+            jest.spyOn(db, 'query').mockResolvedValueOnce({ rows: [] })
             // ACT & ASSERT
-            await expect(Test.create(testData)).rejects.toThrow("A test with this name already exists")
+            await expect(Question.create(incorrectQuestionData)).rejects.toThrow("A test with this ID does not exist")
         })
 
-        it('should throw an Error when subject id is incorrect', async () => {
-            // ARRANGE
-            const incorrectTestData = { testname: 'History Basics', subjectid: 100, duedate: "2025-08-30", assigneddate: "2025-08-26", authorid: 1 }
-            jest.spyOn(db, 'query').mockResolvedValueOnce({ rows: [] })
-                .mockResolvedValueOnce({ rows: [] })
-                .mockResolvedValueOnce({ rows: [{ userid: 1 }] })
-            // ACT & ASSERT
-            await expect(Test.create(incorrectTestData)).rejects.toThrow("A subject with this ID does not exist")
-        })
-
-        it('should throw an Error when author/user id is incorrect', async () => {
-            // ARRANGE
-            const incorrectTestData = { testname: 'History Basics', subjectid: 1, duedate: "2025-08-30", assigneddate: "2025-08-26", authorid: 100 }
-            jest.spyOn(db, 'query').mockResolvedValueOnce({ rows: [] })
-                .mockResolvedValueOnce({ rows: [{ subjectid: 1 }] })
-                .mockResolvedValueOnce({ rows: [] })
-            // ACT & ASSERT
-            await expect(Test.create(incorrectTestData)).rejects.toThrow("An author with this ID does not exist")
-        })
     })
 
     xdescribe('update', () => {

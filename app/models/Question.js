@@ -35,6 +35,11 @@ class Question {
 
     static async create(data){
         const {questioncontent, testid, totalscore, answer} = data
+
+        if (!questioncontent) {
+            throw Error("Question content is missing")
+        }
+
         const existingTest = await db.query("SELECT testid FROM test WHERE testid = $1;", [testid])
         
         if (existingTest.rows.length === 0) {
@@ -46,7 +51,14 @@ class Question {
 
     async update(data){
         const { questioncontent, testid, totalscore, answer } = data
-        const response = await db.query("UPDATE questions SET questioncontent = COALESCE($1, questioncontent), testid = COALESCE($2, testid), totalscore = COALESCE($3, totalscore), answer = COALESCE($4, answer) WHERE questionid = $5 RETURNING *;", [questioncontent, testid, totalscore, answer, this.questionid])
+        const response = await db.query("UPDATE questions SET questioncontent = COALESCE($1, questioncontent), testid = COALESCE($2, testid), totalscore = COALESCE($3, totalscore), answer = COALESCE($4, answer) WHERE questionid = $5 RETURNING *;", 
+            [
+                questioncontent,
+                testid, 
+                totalscore, 
+                answer, 
+                this.questionid
+            ])
         if (response.rows.length !== 1) {
             throw Error("Unable to update question")
         }
