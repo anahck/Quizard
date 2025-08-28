@@ -26,10 +26,14 @@
         <button type="button" id="prev-btn">Previous</button>
         <button type="button" id="next-btn">Next</button>
         <button type="button" id="submit-btn">Submit</button>
-        <script> setTimeout(() => { document.getElementById('submit-btn').style.display = 'none'; 
-          window.location.href = 'dashboard.html';
-        }, 5000);
-         </script>
+        <script> 
+        const submitBtn = document.getElementById('submit-btn');
+        submitBtn.addEventListener('click', () => {
+          setTimeout(() => {
+            window.location.href = 'dashboard.html'
+          }, 5000);
+        })
+        </script>
       </div>
     </form>
   </main>
