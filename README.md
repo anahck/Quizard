@@ -44,4 +44,4 @@ npm run dev
 
 Frontend:
 Simply open index.html in your browser or use Live Server.
-```
+
