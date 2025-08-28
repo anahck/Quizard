@@ -7,7 +7,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     const profileEl = document.getElementById("user-email")
     const pointsEl = document.getElementById("user-points")
 
-
     try {
         const response = await fetch("http://localhost:3000/tests")
         const tests = await response.json()
@@ -111,18 +110,18 @@ document.addEventListener("DOMContentLoaded", async () => {
         })
         const scores = await scoresRes.json()
 
-        // update profile + points headers
-        profileEl.textContent = `Profile: ${userData.email || "Unknown"}`
+        // ✅ FIX: only insert values, not "Profile:" / "Points:" again
+        profileEl.textContent = userData.email || "Unknown"
         if (scores.length > 0) {
             const lastAttempt = scores[scores.length - 1] // take last record
-            pointsEl.textContent = `Points: ${lastAttempt.score}`
+            pointsEl.textContent = lastAttempt.score
         } else {
-            pointsEl.textContent = "Points: 0"
+            pointsEl.textContent = "0"
         }
     } catch (err) {
         console.error("Error loading profile/points:", err)
-        profileEl.textContent = "Profile: Error"
-        pointsEl.textContent = "Points: Error"
+        profileEl.textContent = "Error"
+        pointsEl.textContent = "Error"
     }
 })
 
