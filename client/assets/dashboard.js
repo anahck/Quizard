@@ -16,19 +16,27 @@ document.addEventListener("DOMContentLoaded", async () => {
             "3": "This quiz focuses on the Cold War.",
         }
 
-        quizListUl.innerHTML = tests.map(test => `
-            <li>
-                <a href="quiz.html?id=${test.testid}" class="quiz-item" data-id="${test.testid}">${test.testname}</a>
-            </li>`).join("")
+        // quizListUl.innerHTML = tests.map(test => `
+        //     <li>
+        //         <a href="quiz.html?id=${test.testid}" class="quiz-item" data-id="${test.testid}">${test.testname}</a>
+        //     </li>`).join("")
 
-        document.querySelectorAll(".quiz-item").forEach(item => {
+        quizListUl.innerHTML = tests.map(test => `
+            <div class="quiz-card" data-id="${test.testid}">${test.testname}</div>`).join("");
+
+        document.querySelectorAll(".quiz-card").forEach(item => {
+            const testId = item.getAttribute("data-id")
+
             item.addEventListener("mouseenter", (e) => {
-                const testId = e.currentTarget.getAttribute("data-id")
                 description.textContent = testDescriptions[testId]
             })
 
             item.addEventListener("mouseleave", () => {
                 description.textContent = "Hover over a quiz to see its description."
+            })
+
+            item.addEventListener("click", () => {
+                window.location.href = `quiz.html?id=${testId}`
             })
         })
 
