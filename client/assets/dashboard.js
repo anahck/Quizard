@@ -7,8 +7,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     const description = document.getElementById("quiz-description")
 
     // --- NEW: Add references for profile + points ---
-    const profileEl = document.querySelector(".profile")
-    const pointsEl = document.querySelector(".points")
+    const profileEl = document.getElementById("user-email")
+    const pointsEl = document.getElementById("user-points")
+
 
     try {
         const response = await fetch("http://localhost:3000/tests")
