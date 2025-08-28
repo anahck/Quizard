@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script defer src="./assets/createtest.js"></script>
+
+</head>
+<body>
+    <form id="post-form">
+        <fieldset id="test-info">
+            <label for="testname">Test Name:</label>
+            <input type="text" id="testname" name="testname" >
+
+            <label for="subjectid">Subject ID:</label>
+            <input type="text" id="subjectid" name="subjectid" >
+        
+            <label for="assigndate">Assign Date:</label>
+            <input type="date" id="assigneddate" name="assigneddate" >
+        
+            <label for="duedate">Due Date:</label>
+            <input type="date" id="duedate" name="duedate" >
+        </fieldset>
+
+        
+
+        <fieldset id="questions">
+            <label for="question1">Question 1:</label>
+            <textarea id="question1"></textarea>
+        
+            <label for="answer1">Answer 1:</label>
+            <textarea id="answer1"></textarea>
+        </fieldset>
+    
+
+        <button type="submit">Create Test</button>
+    </form>
+
+</body>
+</html>

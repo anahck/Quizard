@@ -20,9 +20,11 @@ async function showId(req, res) {
 }
 
 async function create(req, res) {
+    console.log("hit")
     try {
         const data = req.body
         const newTest = await Test.create(data)
+
         res.status(201).json(newTest);
     } catch (err) {
         res.status(400).json({ "error": err.message })
